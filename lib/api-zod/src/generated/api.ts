@@ -467,7 +467,7 @@ export const ListUserBadgesParams = zod.object({
 export const ListUserBadgesResponseItem = zod.object({
   userId: zod.string(),
   badgeId: zod.number(),
-  awardedAt: zod.coerce.date().optional(),
+  earnedAt: zod.coerce.date().optional(),
 });
 export const ListUserBadgesResponse = zod.array(ListUserBadgesResponseItem);
 

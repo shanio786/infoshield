@@ -1509,7 +1509,7 @@ components:
           type: string
         badgeId:
           type: integer
-        awardedAt:
+        earnedAt:
           type: string
           format: date-time
       required:

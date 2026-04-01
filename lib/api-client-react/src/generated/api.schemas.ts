@@ -125,7 +125,7 @@ export interface QuizResult {
 export interface UserBadgeRecord {
   userId: string;
   badgeId: number;
-  awardedAt?: string;
+  earnedAt?: string;
 }
 
 export interface QuizAttemptRecord {

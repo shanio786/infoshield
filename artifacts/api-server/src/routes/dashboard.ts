@@ -7,6 +7,7 @@ import {
   quizAttemptsTable,
   modulesTable,
   lessonsTable,
+  usersTable,
 } from "@workspace/db/schema";
 import { eq, count } from "drizzle-orm";
 
@@ -14,7 +15,7 @@ const router: IRouter = Router();
 
 router.get("/dashboard/stats", async (req, res) => {
   try {
-    const [totalUsers] = await db.select({ count: count() }).from(userXpTable);
+    const [totalUsers] = await db.select({ count: count() }).from(usersTable);
     const [totalLessons] = await db.select({ count: count() }).from(userProgressTable);
     const [totalQuizzes] = await db.select({ count: count() }).from(quizAttemptsTable);
     const [totalBadges] = await db.select({ count: count() }).from(userBadgesTable);

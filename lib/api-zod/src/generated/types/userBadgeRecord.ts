@@ -9,5 +9,5 @@
 export interface UserBadgeRecord {
   userId: string;
   badgeId: number;
-  awardedAt?: Date;
+  earnedAt?: Date;
 }
