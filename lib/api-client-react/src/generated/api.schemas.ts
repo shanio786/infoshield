@@ -229,6 +229,45 @@ export interface CaseStudy {
   createdAt: string;
 }
 
+export interface User {
+  id: string;
+  displayName: string;
+  email?: string;
+  avatarUrl?: string;
+  createdAt?: string;
+}
+
+export type CreateModuleBody = {
+  title: string;
+  description: string;
+  level?: number;
+  icon?: string;
+  estimatedMinutes?: number;
+};
+
+export type UpdateModuleBody = {
+  title?: string;
+  description?: string;
+  level?: number;
+  icon?: string;
+  estimatedMinutes?: number;
+};
+
+export type CreateLessonBody = {
+  moduleId: number;
+  title: string;
+  content: string;
+  estimatedMinutes?: number;
+  orderIndex?: number;
+};
+
+export type UpdateLessonBody = {
+  title?: string;
+  content?: string;
+  estimatedMinutes?: number;
+  orderIndex?: number;
+};
+
 export type ListQuizzesParams = {
   moduleId?: number;
 };
@@ -236,4 +275,26 @@ export type ListQuizzesParams = {
 export type ListForumPostsParams = {
   limit?: number;
   offset?: number;
+};
+
+export type UpdateForumPostBody = {
+  title?: string;
+  body?: string;
+};
+
+export type UpdateForumReplyBody = {
+  body?: string;
+};
+
+export type CreateUserBody = {
+  id: string;
+  displayName: string;
+  email?: string;
+  avatarUrl?: string;
+};
+
+export type UpdateUserBody = {
+  displayName?: string;
+  email?: string;
+  avatarUrl?: string;
 };

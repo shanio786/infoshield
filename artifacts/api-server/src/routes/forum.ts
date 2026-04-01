@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { db } from "@workspace/db";
-import { forumPostsTable, forumRepliesTable } from "@workspace/db/schema";
+import { forumPostsTable, forumRepliesTable, userBadgesTable, badgesTable } from "@workspace/db/schema";
 import { eq, desc, count } from "drizzle-orm";
 
 const router: IRouter = Router();
@@ -45,6 +45,16 @@ router.post("/forum/posts", async (req, res) => {
       .insert(forumPostsTable)
       .values({ authorName, userId, title, content })
       .returning();
+
+    if (userId) {
+      const existingBadges = await db.select().from(userBadgesTable).where(eq(userBadgesTable.userId, userId));
+      const hasForumVoice = existingBadges.some((b) => b.badgeId === 6);
+      if (!hasForumVoice) {
+        const [badge] = await db.select().from(badgesTable).where(eq(badgesTable.id, 6));
+        if (badge) await db.insert(userBadgesTable).values({ userId, badgeId: 6 });
+      }
+    }
+
     res.status(201).json({ ...post, replyCount: 0 });
   } catch (err) {
     req.log.error({ err }, "Error creating forum post");

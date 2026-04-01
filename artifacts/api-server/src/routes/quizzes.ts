@@ -131,6 +131,7 @@ router.post("/quizzes/:quizId/submit", async (req, res) => {
         if (b) {
           await db.insert(userBadgesTable).values({ userId, badgeId: b.id });
           badgesEarned.push(b);
+          existingBadgeIds.push(b.id);
         }
       }
 
@@ -143,6 +144,21 @@ router.post("/quizzes/:quizId/submit", async (req, res) => {
         if (b) {
           await db.insert(userBadgesTable).values({ userId, badgeId: b.id });
           badgesEarned.push(b);
+          existingBadgeIds.push(b.id);
+        }
+      }
+
+      const highScoreAttempts = await db
+        .select()
+        .from(quizAttemptsTable)
+        .where(eq(quizAttemptsTable.userId, userId));
+      const ninetyPlusCount = highScoreAttempts.filter((a) => a.score >= 90).length;
+      if (ninetyPlusCount >= 2 && !existingBadgeIds.includes(7)) {
+        const [b] = await db.select().from(badgesTable).where(eq(badgesTable.id, 7));
+        if (b) {
+          await db.insert(userBadgesTable).values({ userId, badgeId: b.id });
+          badgesEarned.push(b);
+          existingBadgeIds.push(b.id);
         }
       }
     }

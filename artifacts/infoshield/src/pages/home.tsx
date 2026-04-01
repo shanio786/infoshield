@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useGetGlobalStats, getGetGlobalStatsQueryKey } from "@workspace/api-client-react";
-import { ShieldAlert, Users, Award, Target, ArrowRight } from "lucide-react";
+import { ShieldAlert, Users, Award, Target, ArrowRight, type LucideIcon } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 
@@ -86,7 +86,7 @@ export function Home() {
   );
 }
 
-function StatCard({ icon: Icon, value, label, delay }: { icon: any, value: React.ReactNode, label: string, delay: number }) {
+function StatCard({ icon: Icon, value, label, delay }: { icon: LucideIcon, value: React.ReactNode, label: string, delay: number }) {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}

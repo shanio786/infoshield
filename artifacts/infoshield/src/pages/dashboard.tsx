@@ -19,11 +19,12 @@ export function Dashboard() {
     return <div className="p-10 text-center text-destructive">Failed to load data.</div>;
   }
 
-  // Calculate XP progress to next level
-  const baseXPForCurrentLevel = (dashboard.level - 1) * 1000;
-  const nextLevelXP = dashboard.level * 1000;
+  // Calculate XP progress to next level (matches backend: level = floor(xp/200)+1)
+  const XP_PER_LEVEL = 200;
+  const baseXPForCurrentLevel = (dashboard.level - 1) * XP_PER_LEVEL;
+  const nextLevelXP = dashboard.level * XP_PER_LEVEL;
   const currentLevelProgress = dashboard.totalXp - baseXPForCurrentLevel;
-  const xpNeeded = nextLevelXP - baseXPForCurrentLevel;
+  const xpNeeded = XP_PER_LEVEL;
   const progressPct = Math.min(100, Math.max(0, (currentLevelProgress / xpNeeded) * 100));
 
   const modulePct = (dashboard.modulesCompleted / dashboard.modulesTotal) * 100 || 0;

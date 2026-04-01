@@ -25,6 +25,8 @@ tags:
     description: Dashboard summary operations
   - name: casestudies
     description: Case study operations
+  - name: users
+    description: User operations
 
 paths:
   /healthz:
@@ -54,6 +56,35 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Module"
+    post:
+      operationId: createModule
+      tags: [modules]
+      summary: Create a new learning module
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, description]
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                level:
+                  type: integer
+                icon:
+                  type: string
+                estimatedMinutes:
+                  type: integer
+      responses:
+        "201":
+          description: Created module
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Module"
 
   /modules/{moduleId}:
     get:
@@ -79,6 +110,96 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateModule
+      tags: [modules]
+      summary: Update a learning module
+      parameters:
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                level:
+                  type: integer
+                icon:
+                  type: string
+                estimatedMinutes:
+                  type: integer
+      responses:
+        "200":
+          description: Updated module
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Module"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteModule
+      tags: [modules]
+      summary: Delete a learning module
+      parameters:
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /lessons:
+    post:
+      operationId: createLesson
+      tags: [lessons]
+      summary: Create a new lesson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [moduleId, title, content]
+              properties:
+                moduleId:
+                  type: integer
+                title:
+                  type: string
+                content:
+                  type: string
+                estimatedMinutes:
+                  type: integer
+                orderIndex:
+                  type: integer
+      responses:
+        "201":
+          description: Created lesson
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lesson"
 
   /lessons/{lessonId}:
     get:
@@ -98,6 +219,63 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Lesson"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateLesson
+      tags: [lessons]
+      summary: Update a lesson
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                estimatedMinutes:
+                  type: integer
+                orderIndex:
+                  type: integer
+      responses:
+        "200":
+          description: Updated lesson
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lesson"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteLesson
+      tags: [lessons]
+      summary: Delete a lesson
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
         "404":
           description: Not found
           content:
@@ -334,6 +512,59 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateForumPost
+      tags: [forum]
+      summary: Update a forum post
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+      responses:
+        "200":
+          description: Updated post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumPost"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteForumPost
+      tags: [forum]
+      summary: Delete a forum post
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /forum/posts/{postId}/replies:
     post:
@@ -359,6 +590,191 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ForumReply"
+
+  /forum/posts/{postId}/replies/{replyId}:
+    put:
+      operationId: updateForumReply
+      tags: [forum]
+      summary: Update a forum reply
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: replyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+      responses:
+        "200":
+          description: Updated reply
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumReply"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteForumReply
+      tags: [forum]
+      summary: Delete a forum reply
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: replyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List all users
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      operationId: createUser
+      tags: [users]
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, displayName]
+              properties:
+                id:
+                  type: string
+                displayName:
+                  type: string
+                email:
+                  type: string
+                avatarUrl:
+                  type: string
+      responses:
+        "201":
+          description: Created user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users/{userId}:
+    get:
+      operationId: getUser
+      tags: [users]
+      summary: Get a user by ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateUser
+      tags: [users]
+      summary: Update a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                email:
+                  type: string
+                avatarUrl:
+                  type: string
+      responses:
+        "200":
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteUser
+      tags: [users]
+      summary: Delete a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /case-studies:
     get:
@@ -974,3 +1390,21 @@ components:
         - lessons
         - sources
         - createdAt
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        email:
+          type: string
+        avatarUrl:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - displayName

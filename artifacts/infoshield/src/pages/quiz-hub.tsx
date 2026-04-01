@@ -1,4 +1,4 @@
-import { useListQuizzes, getListQuizzesQueryKey, useGetUserProgress, getGetUserProgressQueryKey } from "@workspace/api-client-react";
+import { useListQuizzes, getListQuizzesQueryKey, useGetUserProgress, getGetUserProgressQueryKey, type UserProgressQuizAttemptsItem } from "@workspace/api-client-react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { HelpCircle, CheckCircle, XCircle } from "lucide-react";
@@ -18,7 +18,7 @@ export function QuizHub() {
   const attemptsByQuiz = progress?.quizAttempts.reduce((acc, attempt) => {
     acc[attempt.quizId] = attempt;
     return acc;
-  }, {} as Record<number, any>) || {};
+  }, {} as Record<number, UserProgressQuizAttemptsItem>) || {};
 
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-10 w-full">

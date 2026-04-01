@@ -30,6 +30,17 @@ export const ListModulesResponseItem = zod.object({
 export const ListModulesResponse = zod.array(ListModulesResponseItem);
 
 /**
+ * @summary Create a new learning module
+ */
+export const CreateModuleBody = zod.object({
+  title: zod.string(),
+  description: zod.string(),
+  level: zod.number().optional(),
+  icon: zod.string().optional(),
+  estimatedMinutes: zod.number().optional(),
+});
+
+/**
  * @summary Get a single module with its lessons
  */
 export const GetModuleParams = zod.object({
@@ -58,6 +69,50 @@ export const GetModuleResponse = zod.object({
 });
 
 /**
+ * @summary Update a learning module
+ */
+export const UpdateModuleParams = zod.object({
+  moduleId: zod.coerce.number(),
+});
+
+export const UpdateModuleBody = zod.object({
+  title: zod.string().optional(),
+  description: zod.string().optional(),
+  level: zod.number().optional(),
+  icon: zod.string().optional(),
+  estimatedMinutes: zod.number().optional(),
+});
+
+export const UpdateModuleResponse = zod.object({
+  id: zod.number(),
+  title: zod.string(),
+  description: zod.string(),
+  level: zod.number(),
+  icon: zod.string(),
+  lessonCount: zod.number(),
+  estimatedMinutes: zod.number(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Delete a learning module
+ */
+export const DeleteModuleParams = zod.object({
+  moduleId: zod.coerce.number(),
+});
+
+/**
+ * @summary Create a new lesson
+ */
+export const CreateLessonBody = zod.object({
+  moduleId: zod.number(),
+  title: zod.string(),
+  content: zod.string(),
+  estimatedMinutes: zod.number().optional(),
+  orderIndex: zod.number().optional(),
+});
+
+/**
  * @summary Get a single lesson
  */
 export const GetLessonParams = zod.object({
@@ -72,6 +127,37 @@ export const GetLessonResponse = zod.object({
   orderIndex: zod.number(),
   estimatedMinutes: zod.number(),
   createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Update a lesson
+ */
+export const UpdateLessonParams = zod.object({
+  lessonId: zod.coerce.number(),
+});
+
+export const UpdateLessonBody = zod.object({
+  title: zod.string().optional(),
+  content: zod.string().optional(),
+  estimatedMinutes: zod.number().optional(),
+  orderIndex: zod.number().optional(),
+});
+
+export const UpdateLessonResponse = zod.object({
+  id: zod.number(),
+  moduleId: zod.number(),
+  title: zod.string(),
+  content: zod.string(),
+  orderIndex: zod.number(),
+  estimatedMinutes: zod.number(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Delete a lesson
+ */
+export const DeleteLessonParams = zod.object({
+  lessonId: zod.coerce.number(),
 });
 
 /**
@@ -366,6 +452,35 @@ export const GetForumPostResponse = zod.object({
 });
 
 /**
+ * @summary Update a forum post
+ */
+export const UpdateForumPostParams = zod.object({
+  postId: zod.coerce.number(),
+});
+
+export const UpdateForumPostBody = zod.object({
+  title: zod.string().optional(),
+  body: zod.string().optional(),
+});
+
+export const UpdateForumPostResponse = zod.object({
+  id: zod.number(),
+  authorName: zod.string(),
+  userId: zod.string(),
+  title: zod.string(),
+  content: zod.string(),
+  replyCount: zod.number(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Delete a forum post
+ */
+export const DeleteForumPostParams = zod.object({
+  postId: zod.coerce.number(),
+});
+
+/**
  * @summary Create a reply to a forum post
  */
 export const CreateForumReplyParams = zod.object({
@@ -376,6 +491,100 @@ export const CreateForumReplyBody = zod.object({
   authorName: zod.string(),
   userId: zod.string(),
   content: zod.string(),
+});
+
+/**
+ * @summary Update a forum reply
+ */
+export const UpdateForumReplyParams = zod.object({
+  postId: zod.coerce.number(),
+  replyId: zod.coerce.number(),
+});
+
+export const UpdateForumReplyBody = zod.object({
+  body: zod.string().optional(),
+});
+
+export const UpdateForumReplyResponse = zod.object({
+  id: zod.number(),
+  postId: zod.number(),
+  authorName: zod.string(),
+  userId: zod.string(),
+  content: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Delete a forum reply
+ */
+export const DeleteForumReplyParams = zod.object({
+  postId: zod.coerce.number(),
+  replyId: zod.coerce.number(),
+});
+
+/**
+ * @summary List all users
+ */
+export const ListUsersResponseItem = zod.object({
+  id: zod.string(),
+  displayName: zod.string(),
+  email: zod.string().optional(),
+  avatarUrl: zod.string().optional(),
+  createdAt: zod.coerce.date().optional(),
+});
+export const ListUsersResponse = zod.array(ListUsersResponseItem);
+
+/**
+ * @summary Create a user
+ */
+export const CreateUserBody = zod.object({
+  id: zod.string(),
+  displayName: zod.string(),
+  email: zod.string().optional(),
+  avatarUrl: zod.string().optional(),
+});
+
+/**
+ * @summary Get a user by ID
+ */
+export const GetUserParams = zod.object({
+  userId: zod.coerce.string(),
+});
+
+export const GetUserResponse = zod.object({
+  id: zod.string(),
+  displayName: zod.string(),
+  email: zod.string().optional(),
+  avatarUrl: zod.string().optional(),
+  createdAt: zod.coerce.date().optional(),
+});
+
+/**
+ * @summary Update a user
+ */
+export const UpdateUserParams = zod.object({
+  userId: zod.coerce.string(),
+});
+
+export const UpdateUserBody = zod.object({
+  displayName: zod.string().optional(),
+  email: zod.string().optional(),
+  avatarUrl: zod.string().optional(),
+});
+
+export const UpdateUserResponse = zod.object({
+  id: zod.string(),
+  displayName: zod.string(),
+  email: zod.string().optional(),
+  avatarUrl: zod.string().optional(),
+  createdAt: zod.coerce.date().optional(),
+});
+
+/**
+ * @summary Delete a user
+ */
+export const DeleteUserParams = zod.object({
+  userId: zod.coerce.string(),
 });
 
 /**
