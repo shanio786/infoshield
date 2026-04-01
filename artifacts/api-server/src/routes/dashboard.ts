@@ -65,12 +65,12 @@ router.get("/dashboard/:userId", async (req, res) => {
 
     const recentActivity = [
       ...progressRows.slice(-3).map((p) => ({
-        type: "lesson_completed",
+        type: "lesson",
         description: `Completed lesson #${p.lessonId}`,
         timestamp: p.completedAt,
       })),
       ...quizAttempts.slice(-2).map((a) => ({
-        type: "quiz_attempted",
+        type: "quiz",
         description: `Scored ${a.score}% on quiz #${a.quizId}`,
         timestamp: a.attemptedAt,
       })),

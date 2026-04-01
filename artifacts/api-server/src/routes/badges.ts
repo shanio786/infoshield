@@ -28,11 +28,10 @@ router.get("/badges/:badgeId", async (req, res) => {
 
 router.post("/badges", async (req, res) => {
   try {
-    const { name, description, icon, requirement } = req.body as {
+    const { name, description, icon } = req.body as {
       name: string;
       description: string;
       icon?: string;
-      requirement?: string;
     };
     const [badge] = await db.insert(badgesTable).values({ name, description, icon: icon ?? "shield" }).returning();
     res.status(201).json(badge);
@@ -45,12 +44,11 @@ router.post("/badges", async (req, res) => {
 router.put("/badges/:badgeId", async (req, res) => {
   try {
     const badgeId = parseInt(req.params.badgeId);
-    const { name, description, icon, requirement } = req.body as { name?: string; description?: string; icon?: string; requirement?: string };
+    const { name, description, icon } = req.body as { name?: string; description?: string; icon?: string };
     const updates: Record<string, unknown> = {};
     if (name !== undefined) updates.name = name;
     if (description !== undefined) updates.description = description;
     if (icon !== undefined) updates.icon = icon;
-    if (requirement !== undefined) updates.requirement = requirement;
     const [badge] = await db.update(badgesTable).set(updates).where(eq(badgesTable.id, badgeId)).returning();
     if (!badge) { res.status(404).json({ error: "Badge not found" }); return; }
     res.json(badge);
