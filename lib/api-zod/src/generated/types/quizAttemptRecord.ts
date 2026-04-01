@@ -6,12 +6,13 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface QuizQuestion {
+export interface QuizAttemptRecord {
   id: number;
   quizId: number;
-  question: string;
-  options: string[];
-  correctOption?: number;
-  hint?: string;
-  orderIndex: number;
+  userId: string;
+  score: number;
+  totalQuestions: number;
+  passed: number;
+  xpEarned: number;
+  attemptedAt: Date;
 }

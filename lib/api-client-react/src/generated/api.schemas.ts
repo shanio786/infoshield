@@ -60,6 +60,7 @@ export interface QuizQuestion {
   quizId: number;
   question: string;
   options: string[];
+  correctOption?: number;
   hint?: string;
   orderIndex: number;
 }
@@ -119,6 +120,23 @@ export interface QuizResult {
   xpEarned: number;
   badgesEarned: Badge[];
   answerFeedback: QuizResultAnswerFeedbackItem[];
+}
+
+export interface UserBadgeRecord {
+  userId: string;
+  badgeId: number;
+  awardedAt?: string;
+}
+
+export interface QuizAttemptRecord {
+  id: number;
+  quizId: number;
+  userId: string;
+  score: number;
+  totalQuestions: number;
+  passed: number;
+  xpEarned: number;
+  attemptedAt: string;
 }
 
 export type UserProgressQuizAttemptsItem = {
@@ -270,6 +288,54 @@ export type UpdateLessonBody = {
 
 export type ListQuizzesParams = {
   moduleId?: number;
+};
+
+export type CreateQuizBody = {
+  moduleId: number;
+  title: string;
+  description?: string;
+  passingScore?: number;
+};
+
+export type UpdateQuizBody = {
+  title?: string;
+  description?: string;
+  passingScore?: number;
+};
+
+export type CreateQuizQuestionBody = {
+  question: string;
+  options: string[];
+  correctOption: number;
+  hint?: string;
+  orderIndex?: number;
+};
+
+export type UpdateQuizQuestionBody = {
+  question?: string;
+  options?: string[];
+  correctOption?: number;
+  hint?: string;
+  orderIndex?: number;
+};
+
+export type CreateBadgeBody = {
+  name: string;
+  description: string;
+  icon?: string;
+  requirement?: string;
+};
+
+export type UpdateBadgeBody = {
+  name?: string;
+  description?: string;
+  icon?: string;
+  requirement?: string;
+};
+
+export type AwardBadgeBody = {
+  userId: string;
+  badgeId: number;
 };
 
 export type ListForumPostsParams = {

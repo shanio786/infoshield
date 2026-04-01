@@ -6,12 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface QuizQuestion {
-  id: number;
-  quizId: number;
+export type CreateQuizQuestionBody = {
   question: string;
   options: string[];
-  correctOption?: number;
+  correctOption: number;
   hint?: string;
-  orderIndex: number;
-}
+  orderIndex?: number;
+};

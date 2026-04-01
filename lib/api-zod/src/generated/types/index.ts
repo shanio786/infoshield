@@ -6,14 +6,18 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./awardBadgeBody";
 export * from "./badge";
 export * from "./badgeRarity";
 export * from "./caseStudy";
 export * from "./completeLessonBody";
+export * from "./createBadgeBody";
 export * from "./createForumPostBody";
 export * from "./createForumReplyBody";
 export * from "./createLessonBody";
 export * from "./createModuleBody";
+export * from "./createQuizBody";
+export * from "./createQuizQuestionBody";
 export * from "./createUserBody";
 export * from "./dashboardSummary";
 export * from "./dashboardSummaryRecentActivityItem";
@@ -29,17 +33,22 @@ export * from "./listQuizzesParams";
 export * from "./module";
 export * from "./moduleWithLessons";
 export * from "./quiz";
+export * from "./quizAttemptRecord";
 export * from "./quizQuestion";
 export * from "./quizResult";
 export * from "./quizResultAnswerFeedbackItem";
 export * from "./quizSubmission";
 export * from "./quizSubmissionAnswersItem";
 export * from "./quizWithQuestions";
+export * from "./updateBadgeBody";
 export * from "./updateForumPostBody";
 export * from "./updateForumReplyBody";
 export * from "./updateLessonBody";
 export * from "./updateModuleBody";
+export * from "./updateQuizBody";
+export * from "./updateQuizQuestionBody";
 export * from "./updateUserBody";
 export * from "./user";
+export * from "./userBadgeRecord";
 export * from "./userProgress";
 export * from "./userProgressQuizAttemptsItem";

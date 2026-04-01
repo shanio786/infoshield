@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: Api
   version: 0.1.0
@@ -1365,8 +1365,6 @@ components:
           type: array
           items:
             type: string
-        correctOption:
-          type: integer
         hint:
           type: string
         orderIndex:
@@ -1515,6 +1513,33 @@ components:
       required:
         - userId
         - badgeId
+
+    QuizQuestion:
+      type: object
+      properties:
+        id:
+          type: integer
+        quizId:
+          type: integer
+        question:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        correctOption:
+          type: integer
+        hint:
+          type: string
+        orderIndex:
+          type: integer
+      required:
+        - id
+        - quizId
+        - question
+        - options
+        - correctOption
+        - orderIndex
 
     QuizAttemptRecord:
       type: object

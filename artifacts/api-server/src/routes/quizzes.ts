@@ -179,4 +179,128 @@ router.post("/quizzes/:quizId/submit", async (req, res) => {
   }
 });
 
+router.post("/quizzes", async (req, res) => {
+  try {
+    const { moduleId, title, description, passingScore } = req.body as {
+      moduleId: number;
+      title: string;
+      description?: string;
+      passingScore?: number;
+    };
+    const [quiz] = await db
+      .insert(quizzesTable)
+      .values({ moduleId, title, description: description ?? "", passingScore: passingScore ?? 70 })
+      .returning();
+    res.status(201).json(quiz);
+  } catch (err) {
+    req.log.error({ err }, "Error creating quiz");
+    res.status(500).json({ error: "Failed to create quiz" });
+  }
+});
+
+router.put("/quizzes/:quizId", async (req, res) => {
+  try {
+    const quizId = parseInt(req.params.quizId);
+    const { title, description, passingScore } = req.body as { title?: string; description?: string; passingScore?: number };
+    const updates: Record<string, unknown> = {};
+    if (title !== undefined) updates.title = title;
+    if (description !== undefined) updates.description = description;
+    if (passingScore !== undefined) updates.passingScore = passingScore;
+    const [quiz] = await db.update(quizzesTable).set(updates).where(eq(quizzesTable.id, quizId)).returning();
+    if (!quiz) { res.status(404).json({ error: "Quiz not found" }); return; }
+    res.json(quiz);
+  } catch (err) {
+    req.log.error({ err }, "Error updating quiz");
+    res.status(500).json({ error: "Failed to update quiz" });
+  }
+});
+
+router.delete("/quizzes/:quizId", async (req, res) => {
+  try {
+    const quizId = parseInt(req.params.quizId);
+    await db.delete(quizAttemptsTable).where(eq(quizAttemptsTable.quizId, quizId));
+    await db.delete(quizQuestionsTable).where(eq(quizQuestionsTable.quizId, quizId));
+    await db.delete(quizzesTable).where(eq(quizzesTable.id, quizId));
+    res.status(204).send();
+  } catch (err) {
+    req.log.error({ err }, "Error deleting quiz");
+    res.status(500).json({ error: "Failed to delete quiz" });
+  }
+});
+
+router.get("/quizzes/:quizId/questions", async (req, res) => {
+  try {
+    const quizId = parseInt(req.params.quizId);
+    const questions = await db.select().from(quizQuestionsTable).where(eq(quizQuestionsTable.quizId, quizId)).orderBy(quizQuestionsTable.orderIndex);
+    res.json(questions);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch questions" });
+  }
+});
+
+router.post("/quizzes/:quizId/questions", async (req, res) => {
+  try {
+    const quizId = parseInt(req.params.quizId);
+    const { question, options, correctOption, hint, orderIndex } = req.body as {
+      question: string;
+      options: string[];
+      correctOption: number;
+      hint?: string;
+      orderIndex?: number;
+    };
+    const [q] = await db.insert(quizQuestionsTable).values({ quizId, question, options, correctOption, hint: hint ?? null, orderIndex: orderIndex ?? 0 }).returning();
+    res.status(201).json(q);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create question" });
+  }
+});
+
+router.put("/quizzes/:quizId/questions/:questionId", async (req, res) => {
+  try {
+    const questionId = parseInt(req.params.questionId);
+    const { question, options, correctOption, hint, orderIndex } = req.body as { question?: string; options?: string[]; correctOption?: number; hint?: string; orderIndex?: number };
+    const updates: Record<string, unknown> = {};
+    if (question !== undefined) updates.question = question;
+    if (options !== undefined) updates.options = options;
+    if (correctOption !== undefined) updates.correctOption = correctOption;
+    if (hint !== undefined) updates.hint = hint;
+    if (orderIndex !== undefined) updates.orderIndex = orderIndex;
+    const [q] = await db.update(quizQuestionsTable).set(updates).where(eq(quizQuestionsTable.id, questionId)).returning();
+    if (!q) { res.status(404).json({ error: "Question not found" }); return; }
+    res.json(q);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update question" });
+  }
+});
+
+router.delete("/quizzes/:quizId/questions/:questionId", async (req, res) => {
+  try {
+    const questionId = parseInt(req.params.questionId);
+    await db.delete(quizQuestionsTable).where(eq(quizQuestionsTable.id, questionId));
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete question" });
+  }
+});
+
+router.get("/quizzes/attempts/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const attempts = await db.select().from(quizAttemptsTable).where(eq(quizAttemptsTable.userId, userId));
+    res.json(attempts);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch attempts" });
+  }
+});
+
+router.delete("/quizzes/attempts/:attemptId", async (req, res) => {
+  try {
+    const attemptId = parseInt(req.params.attemptId);
+    await db.delete(quizAttemptsTable).where(eq(quizAttemptsTable.id, attemptId));
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete attempt" });
+  }
+});
+
 export default router;

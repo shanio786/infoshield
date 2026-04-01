@@ -179,6 +179,16 @@ export const ListQuizzesResponseItem = zod.object({
 export const ListQuizzesResponse = zod.array(ListQuizzesResponseItem);
 
 /**
+ * @summary Create a new quiz
+ */
+export const CreateQuizBody = zod.object({
+  moduleId: zod.number(),
+  title: zod.string(),
+  description: zod.string().optional(),
+  passingScore: zod.number().optional(),
+});
+
+/**
  * @summary Get quiz with questions
  */
 export const GetQuizParams = zod.object({
@@ -197,11 +207,137 @@ export const GetQuizResponse = zod.object({
       quizId: zod.number(),
       question: zod.string(),
       options: zod.array(zod.string()),
+      correctOption: zod.number().optional(),
       hint: zod.string().optional(),
       orderIndex: zod.number(),
     }),
   ),
   createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Update a quiz
+ */
+export const UpdateQuizParams = zod.object({
+  quizId: zod.coerce.number(),
+});
+
+export const UpdateQuizBody = zod.object({
+  title: zod.string().optional(),
+  description: zod.string().optional(),
+  passingScore: zod.number().optional(),
+});
+
+export const UpdateQuizResponse = zod.object({
+  id: zod.number(),
+  moduleId: zod.number(),
+  title: zod.string(),
+  description: zod.string(),
+  questionCount: zod.number(),
+  passingScore: zod.number(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Delete a quiz
+ */
+export const DeleteQuizParams = zod.object({
+  quizId: zod.coerce.number(),
+});
+
+/**
+ * @summary List questions for a quiz
+ */
+export const ListQuizQuestionsParams = zod.object({
+  quizId: zod.coerce.number(),
+});
+
+export const ListQuizQuestionsResponseItem = zod.object({
+  id: zod.number(),
+  quizId: zod.number(),
+  question: zod.string(),
+  options: zod.array(zod.string()),
+  correctOption: zod.number().optional(),
+  hint: zod.string().optional(),
+  orderIndex: zod.number(),
+});
+export const ListQuizQuestionsResponse = zod.array(
+  ListQuizQuestionsResponseItem,
+);
+
+/**
+ * @summary Create a quiz question
+ */
+export const CreateQuizQuestionParams = zod.object({
+  quizId: zod.coerce.number(),
+});
+
+export const CreateQuizQuestionBody = zod.object({
+  question: zod.string(),
+  options: zod.array(zod.string()),
+  correctOption: zod.number(),
+  hint: zod.string().optional(),
+  orderIndex: zod.number().optional(),
+});
+
+/**
+ * @summary Update a quiz question
+ */
+export const UpdateQuizQuestionParams = zod.object({
+  quizId: zod.coerce.number(),
+  questionId: zod.coerce.number(),
+});
+
+export const UpdateQuizQuestionBody = zod.object({
+  question: zod.string().optional(),
+  options: zod.array(zod.string()).optional(),
+  correctOption: zod.number().optional(),
+  hint: zod.string().optional(),
+  orderIndex: zod.number().optional(),
+});
+
+export const UpdateQuizQuestionResponse = zod.object({
+  id: zod.number(),
+  quizId: zod.number(),
+  question: zod.string(),
+  options: zod.array(zod.string()),
+  correctOption: zod.number().optional(),
+  hint: zod.string().optional(),
+  orderIndex: zod.number(),
+});
+
+/**
+ * @summary Delete a quiz question
+ */
+export const DeleteQuizQuestionParams = zod.object({
+  quizId: zod.coerce.number(),
+  questionId: zod.coerce.number(),
+});
+
+/**
+ * @summary List quiz attempts for a user
+ */
+export const ListQuizAttemptsParams = zod.object({
+  userId: zod.coerce.string(),
+});
+
+export const ListQuizAttemptsResponseItem = zod.object({
+  id: zod.number(),
+  quizId: zod.number(),
+  userId: zod.string(),
+  score: zod.number(),
+  totalQuestions: zod.number(),
+  passed: zod.number(),
+  xpEarned: zod.number(),
+  attemptedAt: zod.coerce.date(),
+});
+export const ListQuizAttemptsResponse = zod.array(ListQuizAttemptsResponseItem);
+
+/**
+ * @summary Delete a quiz attempt record
+ */
+export const DeleteQuizAttemptParams = zod.object({
+  attemptId: zod.coerce.number(),
 });
 
 /**
@@ -262,6 +398,94 @@ export const ListBadgesResponseItem = zod.object({
   createdAt: zod.coerce.date(),
 });
 export const ListBadgesResponse = zod.array(ListBadgesResponseItem);
+
+/**
+ * @summary Create a badge
+ */
+export const CreateBadgeBody = zod.object({
+  name: zod.string(),
+  description: zod.string(),
+  icon: zod.string().optional(),
+  requirement: zod.string().optional(),
+});
+
+/**
+ * @summary Get a badge by ID
+ */
+export const GetBadgeParams = zod.object({
+  badgeId: zod.coerce.number(),
+});
+
+export const GetBadgeResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  description: zod.string(),
+  icon: zod.string(),
+  rarity: zod.enum(["common", "uncommon", "rare", "legendary"]),
+  xpValue: zod.number(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Update a badge
+ */
+export const UpdateBadgeParams = zod.object({
+  badgeId: zod.coerce.number(),
+});
+
+export const UpdateBadgeBody = zod.object({
+  name: zod.string().optional(),
+  description: zod.string().optional(),
+  icon: zod.string().optional(),
+  requirement: zod.string().optional(),
+});
+
+export const UpdateBadgeResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  description: zod.string(),
+  icon: zod.string(),
+  rarity: zod.enum(["common", "uncommon", "rare", "legendary"]),
+  xpValue: zod.number(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Delete a badge
+ */
+export const DeleteBadgeParams = zod.object({
+  badgeId: zod.coerce.number(),
+});
+
+/**
+ * @summary List badges earned by a user
+ */
+export const ListUserBadgesParams = zod.object({
+  userId: zod.coerce.string(),
+});
+
+export const ListUserBadgesResponseItem = zod.object({
+  userId: zod.string(),
+  badgeId: zod.number(),
+  awardedAt: zod.coerce.date().optional(),
+});
+export const ListUserBadgesResponse = zod.array(ListUserBadgesResponseItem);
+
+/**
+ * @summary Award a badge to a user
+ */
+export const AwardBadgeBody = zod.object({
+  userId: zod.string(),
+  badgeId: zod.number(),
+});
+
+/**
+ * @summary Revoke a badge from a user
+ */
+export const RevokeBadgeParams = zod.object({
+  userId: zod.coerce.string(),
+  badgeId: zod.coerce.number(),
+});
 
 /**
  * @summary Get user progress
