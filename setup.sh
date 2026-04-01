@@ -47,7 +47,8 @@ pnpm --filter @workspace/db run push
 
 # 5. Seed data
 echo "Seeding data..."
-pnpm tsx scripts/seed.ts
+npm install -g tsx 2>/dev/null || true
+pnpm exec tsx scripts/seed.ts
 
 # 6. Build frontend
 echo "Building frontend..."
