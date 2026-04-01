@@ -1,0 +1,1229 @@
+Project ID: 2026-S1-35 
+
+
+
+Topic: Exploring the Mechanics of Information Warfare with Interactive Learning App 
+
+
+
+Document: Project Proposal and Plan 
+
+
+
+Unit Code: 11522 
+
+
+
+Approved by Group Members: 
+
+
+
+Name 
+
+
+
+Student ID 
+
+
+
+Jin Strachan 
+
+
+
+U3222772 
+
+
+
+Marshall Lee 
+
+
+
+U3103897 
+
+
+
+Angelica Macatangay 
+
+
+
+U3293809 
+
+
+
+Freya Yang 
+
+
+
+U3270459  
+
+
+
+Muhammad Shafi 
+
+
+
+U3260270 
+
+
+
+ 
+
+
+
+ 
+
+
+
+1 Project name 
+
+
+
+Exploring the Mechanics of Information Warfare with Interactive Learning App 
+
+
+
+2 Project personnel 
+
+
+
+2.1 Sponsor 
+
+
+
+Moinul Islam  
+
+
+
+Email: moin@onfact.xyz  
+
+
+
+2.2 Supervisor 
+
+
+
+Abu.Barkat Ullah 
+
+
+
+Email:  Abu.BarkatUllah@canberra.edu.au   
+
+
+
+2.3 Mentor 
+
+
+
+Aya Hussein 
+
+
+
+Email: Aya.Hussein@canberra.edu.au  
+
+
+
+2.4 Project Team 
+
+
+
+Project manager & Data analyst 
+
+
+
+Jin Strachan 
+
+
+
+Student ID: u3222772 
+
+
+
+Email: u3222772@uni.canberra.edu.au 
+
+
+
+Content research & Cybersecurity analyst 
+
+
+
+Marshall Lee 
+
+
+
+Student ID: u3103897 
+
+
+
+Email: u3103897@uni.canberra.edu.au 
+
+
+
+Testing & Quality Assurance 
+
+
+
+Angelica Macatangay 
+
+
+
+Student ID: u3293809 
+
+
+
+Email: u3293809@uni.canberra.edu.au  
+
+
+
+UI/UX designer & Developer 
+
+
+
+Freya Yang 
+
+
+
+Student ID: u3270459 
+
+
+
+Email: u3270459@uni.canberra.edu.au  
+
+
+
+App developer 
+
+
+
+Muhammand Shafi 
+
+
+
+Student ID: u3260270 
+
+
+
+Email: u3260270@uni.canberra.edu.au  
+
+
+
+3 Introduction 
+
+
+
+The immediate advancement of digital technologies including Artificial Intelligence (AI) has significantly impacted how information is created, disseminated and consumed. While AI technologies have allowed the public to achieve an access to knowledge, they have also escalated the spread of false and misleading content. Research from the MIT Media Lab highlights that false information distributes six times faster than true information, proving the inherent weakness of online ecosystems to manipulation and bias (Vosoughi, Roy and Aral, 2018). Additionally, the research stated that misinformation and disinformation as the most significant global threats in the short term and one of the top five long-term threats (World Economic Forum, 2025). These findings support the instant need for mitigations that assist public awareness and resilience against misleading information. 
+
+
+
+The increasing development of AI-generated content has further increased the level of challenge. With the widespread use of deepfakes, synthetic media and automated content generation tools, recognising original information from manipulated information has become increasingly challenging for the public. The issue has considered as a fatal cybersecurity and social threat because individuals are easily exposed to manipulative information.  Without appropriate media literacy or analytical skills, the public may unintentionally receive, trust and share dangerous misinformation, contributing to its continued spread. 
+
+
+
+In the Australian context, misinformation and disinformation have increasingly affected electoral processes and public beliefs. While the 2019 Australian Federal Election, a major ‘Death Tax’ disinformation campaign wrongly stated that the Labour party planned to legislate an inheritance tax. This false information spread rapidly across social medial platforms including Facebook and YouTube and was spread by political actors and reached more than one million views, proving how disinformation can hugely impact political disclosure (Warren, 2020). 
+
+
+
+More recently, electoral disinformation targeted the Australian Electoral Commission (AEC) itself during the 2023 Indigenous Voice to Parliament referendum. Viral descriptions including the #voteoften allegation and public claims that the referendum process was plotted were proliferated across social media and even mentioned by politicians. Empirical findings demonstrate that while general trust in the AEC maintained high, exposure to this disinformation still caused remarkable decreases in institutional trustworthy, showing the tangible threats misinformation forms in Australia’s democratic environment (Carson et al., 2025). 
+
+
+
+These Australian studies demonstrate that misinformation is not a broad world-wide issue but an on-going domestic challenge with massive impacts on voter recognitions, belief in election organisations and the transparency of democratic processes.  
+
+
+
+4 project Specifications  
+
+
+
+4.1 Description of Project 
+
+
+
+According to the project problem definition, contemporary misinformation and disinformation campaigns have become significantly sophisticated, often using AI-generated content, deepfakes and cooperated online influence strategies. These modern tendencies highlight the importance of educating users not only about what misinformation is but also how it is created, weaponised and spread in real digital environments. In line with this, the project focuses on developing a human interactive learning platform that allow users to engage directly with examples of manipulation techniques, influence strategies and narrative tactics used in information warfare.   
+
+
+
+The project does not focus on automated detection systems or machine learning based countermeasures. Instead, it focuses on user learning, awareness, recognition, interaction and critical thinking by providing an educational experience rather than a technical detection software program. By conducting well-organised modules, real case studies and interactive challenges, the project enforces that users improve both conceptual understanding and experiential insight into how information manipulation campaign’s function. This matches with the objectives of the industry partner OnFact whose mission is to stand against misinformation using ethical, educational and narrative based methods. 
+
+
+
+Through this context, the project aims to connect cybersecurity, media literacy and human centred interaction learning plan. Ultimately, the project support users in developing the skills needed to guide complex information environments and recognise manipulative narratives. 
+
+
+
+In addition, this project especially explores the Australian electoral context by demonstrating how disinformation spreads during federal elections and national referendums. Recent cases such as the 2019 Death Tax misinformation campaign and the 2023 voice to Parliament referendum disinformation threats on the Australian Electoral Commission support the immediate need for education in this area.  
+
+
+
+Along with the feedback, the application or website is therefore created as an educational tool targeted at users aged over 18, allowing adults to understand, identify and critically analyse election-related misinformation and disinformation. By concentrating on real electoral scenarios and deceptive political descriptions, the platform organises users to safely guide democratic steps and retain trust in official organisations.  
+
+
+
+4.2 Problem Definition 
+
+
+
+Since the problem discussed by the project demonstrates a relatively recent social and technological issue, there is an obvious need for an educational platform that provides accessible, interactive and engaging learning materials. The platform would assist the public understand how misinformation and disinformation are created, distributed and distinguished from real information. However, traditional educational resources often provide static material that is limited to passive reading or simple information listing, making users with less opportunities to deeply involve with or practice the concepts they learn. 
+
+
+
+Therefore, the project aims to introduce an interactive educational approach that allow users with practical skills to identify misinformation and disinformation. The project suggests the development of an application or website that provides a learning environment with functional features including quizzes, level-up badges, scenario-based exercises and other interactive elements planned to motivate more conceptual understanding and active involvement. 
+
+
+
+4.3 Scope 
+
+
+
+In scope 
+
+
+
+Research and knowledge acquisition 
+
+
+
+Identify common manipulation methods, patterns and techniques through academic literatures and industry frameworks 
+
+
+
+Study real case studies including political misinformation case studies including the 2019 Death Tax Campaign and the 2023 Voice Referendum disinformation to research for Australian adult users 
+
+
+
+Review existing learning tools and media literacy interventions to understand current gaps and opportunities for improvement 
+
+
+
+Learning design 
+
+
+
+Integrate real case studies and structured educational content that reflect the tactics, techniques and procedures (TTPs) used in modern information warfare. 
+
+
+
+Implement electoral disinformation scenarios such as false claims about vote manipulation, misleading information shared by politicians and AEC related allegations examples to enforce user understanding of election-related information threats. 
+
+
+
+Evolve a modular learning pathway that proceeds from basic concepts including what is misinformation and disinformation to advanced topics including coordinated influence operations. 
+
+
+
+Ensure content includes studies and detail lessons, guided descriptions and user centred interactions that helps complex ideas simple to understand. 
+
+
+
+Development of an interactive website or application. 
+
+
+
+Quizzes: understanding of key concepts and provide scenario-based decision making. 
+
+
+
+Feedback mechanisms provide rapid explanations, hints and guidance. 
+
+
+
+User reward systems including badges or level-up systems to motivate users of continuous learning. 
+
+
+
+User forums where users can share experiences, discuss questions and reflect on their learning. 
+
+
+
+Simple UX/UI design elements assist users’ accessibility, simplicity and engagement for a wide range of visitors. 
+
+
+
+Design customised education for adults aged over 18, considering real Australian election-related misinformation cases and descriptions they are likely to be exposed in digital environments.  
+
+
+
+Prototype development focusing on demonstrating core educational features. 
+
+
+
+User testing and evaluation. 
+
+
+
+Receive feedback to develop content clarity, learning difficulty and overall user experience. 
+
+
+
+Testing will involve scenarios where users should recognise election-specific misinformation, ensuring relevance to Australian democratic processes. 
+
+
+
+Out of scope 
+
+
+
+The current project focuses on an educational platform but maybe considered for future extensions or mitigation strategies. 
+
+
+
+Automated fact checking, including AI-driven verification software to detect patterns of misinformation and disinformation in real world. 
+
+
+
+Machine learning-based detection or prediction systems including misinformation identification models or deepfake detection algorithms  
+
+
+
+Large scale distribution including commercial investment and launching and integration with social media platforms. 
+
+
+
+Advanced cybersecurity mitigation frameworks including bot support analysis, network defence system and threat algorithms. 
+
+
+
+Policy making and government level of counter misinformation and disinformation legislation since the current project focuses on user education, not governance. 
+
+
+
+Direct restriction in Australian election processes or legislative activities conducted by the AEC since the project is restricted to educational, not operational. 
+
+
+
+4.4 Project Objectives and Outcomes 
+
+
+
+The project aims to create: 
+
+
+
+A functional model of an interactive educational web or mobile application. 
+
+
+
+Well-organised learning modules outlining key misinformation techniques including people witnessed recent Australian election and referendum contexts. 
+
+
+
+Interactive learning activities that improve users’ critical thinking about misinformation and disinformation, specifically in case studies including electoral situations and public-trust challenges. 
+
+
+
+A feedback forum to improve the platform based on user insights. 
+
+
+
+The project targets to: 
+
+
+
+Improving user awareness of misinformation and disinformation with first-hand relevance to how misleading political or election-related claims can influence public perception and recognition in Australia. 
+
+
+
+Enhancing users’ ability to distinguish between accurate information and deceptive content, including false electoral narratives such as the 2019 Death Tax conspiracy and the disinformation around the AEC. 
+
+
+
+Supporting long-term digital media literacy and resilience against manipulated information, allowing adults to independently guide election-related information environments and maintain trust in democratic circumstances. 
+
+
+
+5 literature review 
+
+
+
+Election related misinformation and disinformation have become a critical challenge for Australian democracy, creating public implications around campaigns, electoral administration and trust in democratic authorities. The research 2019 Australian Federal Election stated how false implications could dramatically predominate over true information. Warren (2020) mentioned that how the forged ‘Death Tax’ rumor was strategically extended through videos, gifs, and political messaging, reaching over one million views and thousands of interactions across social media platforms, demonstrating how domestically fabricated disinformation can form electoral recognitions at scale. This matches with wider political communication research mentioning that Australian elections have been constantly impacted by scare style campaigns including Mediscare and the Death Tax disinformation, reflecting how misinformation and disinformation become as parts of political strategy and voter convincement (Carson & Wright, 2022). 
+
+
+
+More recent supporting statements from the 2023 Indigenous Voice to Parliament referendum offers practical insight into the psychological effects of electoral disinformation. Carson et al. Found that exposure to false statements attacking the AEC. For instance, the viral #voteoften and conspiracy that the voting process was forged. It affected small but noticeably recognisable declines in trust toward the AEC while overall trust levels sustained high. Their findings also found that while the AEC’s public counter arguments were slightly effective after users exposed disinformation, initiative messaging itself did not outstandingly improve trust, supporting the limitations of corrective communication in political environments.  
+
+
+
+At the organisational level, Australia’s electoral authorities play an important role in protecting information integrity. Gromping found that the AEC introduces one of the most proactive global models for dealing with electoral disinformation, launching tools such as a disinformation register, Stop and Consider movements, AEC TV explainers, digital watermarks and joint monitoring with the Electoral Integrity Assurance Taskforce (2026). Their comparative framework also recognises consistent challenges including limitations of platform cooperation, moderation powers, and the risk of backfire effects when factualising rampant misinformation and disinformation.  
+
+
+
+These election related findings are related with psychological literature demonstrating why public believe misinformation and disinformation. Nan stated that susceptibility occurs from four mechanisms: reasoning ability, accuracy motivated reasoning, directionally motivated reasoning and identity motivated reasoning. Analytical thinking could minimise vulnerability while intuitive thinking and conspiracy way of thinking accelerates vulnerability (2022). This cognitive framework helps explain why false electoral disinformation specifically exacerbated by political figures or media could remain even when clear correct information adjustments are available. 
+
+
+
+Considering this, the studies mentioned above prove that misinformation in Australia is not restricted to fringe actors but is correlated with political communication strategies, media ecosystems and cognitive misperceptions. Disinformation in elections not only impact voter recognition but also decrease confidence in main democratic organisations including AEC and even in higher trust environments. An educational approach that supports adults with critical thinking capabilities, contextual knowledge of Australian election cases and exposure to realistic manipulation scenarios is therefore implemented as an evidence-based method for improving public resilience.  
+
+
+
+List of Research Papers 
+
+
+
+Research Paper 
+
+
+
+Description 
+
+
+
+Fake News Case Study during the Australian 2019 General Election 
+
+
+
+Demonstrated how the “Death Tax” disinformation conspiracy was strategically extended across social media, achieving over one million views and hugely influencing electoral disclosure.  
+
+
+
+Fake news and democracy: definitions, impact and response 
+
+
+
+Explained how scare-style election misinformation (Mediscare and Death tax) forms Australian political communication and highlighted issues in regulation, platform behaviour and democratic reliability.  
+
+
+
+How election management authorities interrupt electoral disinformation: Australia and the UK in comparative perspective 
+
+
+
+Provided a framework of EMB counter-disinformation designs and showed the AEC as a globally leading case through its disinformation reporting, monitoring and digital imprint methods.  
+
+
+
+Alert, but not alarmed: Electoral disinformation and trust during the 2023 Australian Voice to Parliament referendum 
+
+
+
+Found that referendum disinformation (#voteoften, forged claims) caused minor but recognisable decreases in belief of the AEC whereas also showing limits of counter refutation strategies. 
+
+
+
+Why do people believe health misinformation and who is at risk?  
+
+
+
+Found four psychological mechanisms as mentioned above which explains vulnerability to misinformation 
+
+
+
+Stumble on information or misinformation? Examining the interplay of incidental news exposure, narcissism and new media literacy 
+
+
+
+Focused on misinformation as a main threat to public and intellectual health within media environments formed by incidental exposure and cognitive factors. The topics are health related, but it supports cognitive-susceptibility theory. 
+
+
+
+An Exploration of Disinformation as a Cybersecurity Threat 
+
+
+
+Suggested technological measurements including disclosure analysis and framed disinformation as a recent cybersecurity threat within digital ecosystems.  
+
+
+
+ 
+
+
+
+Data analysis 
+
+
+
+As a part of this research, we will use the dataset “Fake News Elections 2024” from Hugging Face to help analysing common patterns, mechanisms and case studies of misinformation and disinformation on election context. This will support the development of interactive learning components in the project. 
+
+
+
+ 
+
+
+
+6 requirements analysis 
+
+
+
+This identifies and analyses the requirements for developing a functional web-based interactive educational prototype. Requirements are derived from the project description, desired outcomes, scope, and out of scope items. They are categorised into functional, non-functional, and technical to ensure the prototype is engaging, accessible, and achievable within the limitations. 
+
+
+
+6.1 Functional Requirements 
+
+
+
+These define the essential features for user education and interaction on the web platform.  
+
+
+
+Educational Content Development: The system must provide educational content that explains how misinformation and disinformation are created and spread. The development team must research credible sources such as academic articles, reports, and case studies to develop the learning content. These lessons will form the main educational material of the platform. 
+
+
+
+Content Research and Collection: The development team must research and collect reliable information about misinformation and disinformation before creating the learning modules. This includes reviewing academic articles, case studies, and credible reports related to information warfare and media literacy. The collected information will be used to design the learning materials and quiz questions for the platform. 
+
+
+
+Learning Modules and Lesson Structure: The platform must provide learning modules organised in a progressive structure. Each module will include short lessons, examples, and explanations about misinformation tactics, manipulation techniques, and real-world disinformation cases. 
+
+
+
+Interactive Quiz and Assessment System: The system must include quizzes or interactive assessments to test the user’s understanding of the learning content. These quizzes may include multiple-choice questions, scenario-based questions, or activities where users identify whether information is true or misleading. 
+
+
+
+Gamification and User Motivation: The platform must include gamification elements to keep users motivated. This may include badges, rewards, or levels when user complete modules or answer questions correctly. 
+
+
+
+User Progress Tracking: The system should track user progress during the learning process. This may include completed modules, quiz scores, and earned badges. A simple dashboard should display the user’s progress. 
+
+
+
+User Feedback Mechanism: The platform should allow users to provide feedback on the learning modules or quiz questions. This feedback can help improve the educational content during the prototype testing stage. 
+
+
+
+User Testing and Feedback: The system must support basic user testing with classmates or volunteers. Users will interact with the learning modules and quizzes, and their feedback will be collected to evaluate usability and learning effectiveness. The feedback will help improve the prototype during development 
+
+
+
+6.2 Non-functional Requirements 
+
+
+
+These ensure the web prototype is practical, user-friendly, and reliable for educational use.  
+
+
+
+Usability and Accessibility: The platform must be easy to use and simple to navigate. Users should be able to move between learning modules and quizzes easily. The system should support responsive web design so it can be used on both desktop and mobile browsers. The interface should also include readable fonts and clear layouts.  
+
+
+
+Performance: The system should load learning modules and quizzes within 3 to 5 seconds under normal internet conditions. Interactive elements should respond quickly to maintain user engagement.  
+
+
+
+Security and Privacy: The system should follow basic privacy practices by collecting minimal user information. Secure communication using HTTPS should be used to protect user data and login information.  
+
+
+
+Reliability: The prototype should run smoothly during testing and demonstrations. Basic error handling should be included to prevent system crashes during user interaction.  
+
+
+
+Scalability: Even though the system is a prototype, it should be designed so that new learning modules, features, or improvements can be added in the future.  
+
+
+
+6.3 Technical Requirements 
+
+
+
+This specifies the stack for web prototype, emphasizing simplicity and student feasibility.  
+
+
+
+Frontend: The user interface will be developed using WordPress, Nodejs. ---- may be used to create interactive components such as quizzes and progress dashboards. 
+
+
+
+Backend: A lightweight backend using Node.js and PHP be used to support user authentication, content management, and communication between the interface and database. 
+
+
+
+Database: A simple database will store user progress, quiz scores, and badge information. A lightweight solution such as --- or a basic database system may be used.  
+
+
+
+Tools and Hosting: Open-source tools and libraries will be used to support development. The prototype may be deployed using a cloud hosting service or a free platform suitable for student projects.  
+
+
+
+Constraints: The prototype will be developed as a web-based platform only. Native mobile applications will not be developed. Advanced artificial intelligence features are outside the scope of this project. Educational content will be based on credible references and research materials.  
+
+
+
+These requirements support the project's goal of engaging web prototype that bridges cybersecurity and media literacy through interactivity and critical thinking. 
+
+
+
+7 JUSTIFICATIONS of the chosen methods 
+
+
+
+7.1 Proposed Solution 
+
+
+
+The proposed solution for the selected project here is based on the development of an interactive learning application. It will help users to deal with information warfare by making them understand how misinformation spreads and the strategies that are used for such purposes. The application will aid individuals by strengthening them against these misinformation campaigns by providing an educational platform with elements like cyber security awareness and interactive learning techniques.  
+
+
+
+7.2 Alternative Approaches 
+
+
+
+Option 1: Research Portal 
+
+
+
+The first option was research portal, where the group considered that development of a research portal or an information website could be selected. The portal would display educational material and research data related to misinformation campaigns. The data would include a range of different elements like case studies and published articles. It can explain in detail the manipulation techniques. The major disadvantage is limited user engagement. 
+
+
+
+Option 2: Social Media Awareness Campaign 
+
+
+
+The second option was to create a digital awareness campaign through social media platforms. The approach here was based on the development of educational posts and videos along with infographics that can educate users about the misinformation tactics. The main advantage of this alternative approach was its reach to users, which means that social media posts have a greater potential to reach a larger portion of the audience quickly. Despite all these benefits, social media posts are short and brief therefore they do not deliver structured educational experiences.  
+
+
+
+7.3 Justification  
+
+
+
+As the alternative options were evaluated, all seemed less effective as compared to the development of interactive learning applications. It provides a well-balanced combination of education, practicality and technical feasibility. The key benefit is the providence of active engagement for all users unlike the social media campaign awareness and research portal where an individual cannot participate in simulated activities to increase their grip on knowledge. These alternative approaches do not provide the opportunity to develop problem solving skills. The selected approach also aligns well with modern educational practices that stand for digital pedagogy and experiential learning. As a user is able to analyze different scenarios and then they are able to respond to the simulated cases, the application will keep track of all this data to reinforce learning outcomes accordingly. In terms of cyber security, when the public is being educated on information warfare then it is considered as a preventive measure because cybercrimes are increasing. There are so many misinformation campaigns that have succeeded because users do not know how they can recognize the manipulated information. The proposed solution can increase digital resilience among users by simply educating them and teaching them tactics. This approach is interdisciplinary in nature because it not only involves knowledge from software development, but it also incorporates information from cybersecurity, and media studies. The project team will be able to apply not just technical knowledge but also analytical skills.  
+
+
+
+7.4 Project Deliverables  
+
+
+
+The project will provide different deliverables. The first one is the project plan in which the outline of the proposal will be provided. The second deliverable is the System Design Documentation in which all the details about the learning modules will be provided. Then the third deliverable is the interactive application prototype which will display the functionality of the proposed solution. Then comes the testing and evaluation report, which is the fourth deliverable. After all these phases, the final project report and presentation will be delivered. 
+
+
+
+8 Plan and schedule 
+
+
+
+8.1 Resource Requirements 
+
+
+
+The key resources required for the project are listed below. 
+
+
+
+Human resources:  
+
+
+
+1. Project manager & Data analyst - 300 hours 
+
+
+
+2. Content research & Cybersecurity analyst - 300 hours 
+
+
+
+3. Testing & QA - 300 hours 
+
+
+
+4. UI/UX designer & Developer - 300 hours 
+
+
+
+5. App developer - 300 hours 
+
+
+
+Software tools: 
+
+
+
+MS Word, MS Excel, Viso, PowerPoint, Outlook, Adobe, SharePoint, MS Teams, WhatsApp, Python, R, Figma, Trae, WordPress, PHP, Node.js, JavaScript 
+
+
+
+Hardware and infrastructure: 
+
+
+
+Computer, internet connection, cloud storage 
+
+
+
+Research resources: 
+
+
+
+Project information, academic journals or research papers, dataset, case studies and educational resources for interactive learning 
+
+
+
+Testing resources: 
+
+
+
+Test cases and documentation 
+
+
+
+8.2 Work Breakdown Structure (WBS) 
+
+
+
+The WBS table shows how the project is divided into small tasks and deliverables to support effective planning and task management. It includes project initiation, project proposal and plan, research and analysis, application design, development, testing , sponsor review and feedback, and final delivery. 
+
+
+
+Timeline 
+
+
+
+Tasks & Activities 
+
+
+
+Predecessors 
+
+
+
+Week 1 
+
+
+
+16/02/2026 
+
+
+
+– 
+
+
+
+20/02/2026 
+
+
+
+Project Team formation & Project allocation 
+
+
+
+ 
+
+
+
+Week 2 – 4 
+
+
+
+ 
+
+
+
+23/02/2026 
+
+
+
+– 
+
+
+
+13/03/2026 
+
+
+
+Project initiation 
+
+
+
+Stakeholders’ confirmation 
+
+
+
+Project information 
+
+
+
+Communication channels and regular meeting schedule 
+
+
+
+Project proposal and plan 
+
+
+
+Break down the proposal and plan into small tasks and assign to team members. 
+
+
+
+3.1.1 Problem definition and explanation with stated scope 
+
+
+
+3.1.2 Background study and literature review in relation to misinformation, and disinformation 
+
+
+
+3.1.3 Collect datasets 
+
+
+
+3.1.4 Requirements analysis 
+
+
+
+3.1.5 Detailed analysis of chosen options and methods 
+
+
+
+3.1.6 Detailed project plan and schedule, e.g., WBS, CPA 
+
+
+
+3.1.7 Project governance 
+
+
+
+3.1.8 Risk analysis and mitigation strategies 
+
+
+
+3.1.9 Stakeholder analysis and communication plan 
+
+
+
+3.1.10 Quality assurance and measurement 
+
+
+
+ 
+
+
+
+Finalize proposal and plan 
+
+
+
+ 
+
+
+
+1 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+2 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+3.1.1 
+
+
+
+ 
+
+
+
+3.1.1, 3.1.2 
+
+
+
+3.1.1, 3.1.2 
+
+
+
+3.1.4 
+
+
+
+ 
+
+
+
+3.1.6 
+
+
+
+3.1.5, 3.1.6 
+
+
+
+3.1.7 
+
+
+
+3.1.1, 3.1.4, 3.1.5, 3.1.8 
+
+
+
+3.1 
+
+
+
+ 
+
+
+
+Week 5 -10 
+
+
+
+ 
+
+
+
+16/03/2026 
+
+
+
+– 
+
+
+
+24/04/2026 
+
+
+
+Research and execution 
+
+
+
+Literature review on defined articles 
+
+
+
+Analyze misinformation and disinformation cases 
+
+
+
+Identify learning objectives 
+
+
+
+Analyze defined dataset 
+
+
+
+Cleaning dataset 
+
+
+
+Data pre-processing 
+
+
+
+Exploratory data analysis 
+
+
+
+4.3 Application design 
+
+
+
+Define system requirements 
+
+
+
+Design learning modules 
+
+
+
+Create UI/UX wireframes 
+
+
+
+Design application architecture 
+
+
+
+Application development 
+
+
+
+Develop core application framework 
+
+
+
+Implement learning content modules 
+
+
+
+Integrate user interface components 
+
+
+
+Implement interactive features 
+
+
+
+Testing and quality assurance 
+
+
+
+Preparing test cases 
+
+
+
+Conduct functional testing 
+
+
+
+Conduct usability testing 
+
+
+
+Fix bugs and optimize performance 
+
+
+
+App review, feedback and improvement 
+
+
+
+ 
+
+
+
+3 
+
+
+
+ 
+
+
+
+ 
+
+
+
+4.1.1 
+
+
+
+ 
+
+
+
+4.2.1 
+
+
+
+4.2.2 
+
+
+
+ 
+
+
+
+ 
+
+
+
+4.3.1 
+
+
+
+4.3.1 
+
+
+
+4.3.1 
+
+
+
+4.3 
+
+
+
+4.3 
+
+
+
+4.3 
+
+
+
+4.3, 4.4 
+
+
+
+4.4 
+
+
+
+4.4 
+
+
+
+4.4 
+
+
+
+4.5.2, 4.5.3 
+
+
+
+4.1, 4.2, 4.3, 4.4, 4.5 
+
+
+
+ 
+
+
+
+Week 11- 12 
+
+
+
+27/04/2026 
+
+
+
+- 
+
+
+
+10/05/2026 
+
+
+
+Finalize final project report and deliverables, e.g., presentation, poster 
+
+
+
+4 
+
+
+
+ 
+
+
+
+8.3 Critical Path Analysis (CPA) 
+
+
+
+The CPA diagram shows the identified project activities, their durations and the dependencies between tasks to complete the project. The critical path is calculated as follows: 
+
+
+
+Task 1 (1) + Task 3.1 (2) + Task 3.2 (1) + Task 4.1 (1) + Task 4.4 (2) + Task 4.5 (1) + Task 4.6 (2) + Task 5 (2) = 12 weeks
