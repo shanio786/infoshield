@@ -7,6 +7,7 @@ import { DynamicIcon } from "@/lib/icon-map";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/context/auth";
+import { LoginRequiredBanner } from "@/components/login-required-banner";
 
 export function QuizDetail() {
   const params = useParams<{ quizId: string }>();
@@ -202,16 +203,21 @@ export function QuizDetail() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="mt-8 flex justify-end">
-        <Button 
-          size="lg" 
-          disabled={!isAnswered || submitMutation.isPending} 
-          onClick={handleNext}
-          className="px-8 font-semibold"
-        >
-          {submitMutation.isPending ? "Transmitting..." : (isLast ? "Submit Analysis" : "Next Question")}
-          {!isLast && !submitMutation.isPending && <ArrowRight className="w-4 h-4 ml-2" />}
-        </Button>
+      <div className="mt-8 space-y-4">
+        {isLast && !user && (
+          <LoginRequiredBanner action="submit your answers and save your score" compact />
+        )}
+        <div className="flex justify-end">
+          <Button 
+            size="lg" 
+            disabled={!isAnswered || submitMutation.isPending || (isLast && !user)} 
+            onClick={handleNext}
+            className="px-8 font-semibold"
+          >
+            {submitMutation.isPending ? "Transmitting..." : (isLast ? "Submit Analysis" : "Next Question")}
+            {!isLast && !submitMutation.isPending && <ArrowRight className="w-4 h-4 ml-2" />}
+          </Button>
+        </div>
       </div>
     </div>
   );

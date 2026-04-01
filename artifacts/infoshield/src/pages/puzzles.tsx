@@ -4,6 +4,7 @@ import { useAuth } from "@/context/auth";
 import { WordMatchPuzzle } from "@/components/puzzles/WordMatchPuzzle";
 import { FillBlankPuzzle } from "@/components/puzzles/FillBlankPuzzle";
 import { DragOrderPuzzle } from "@/components/puzzles/DragOrderPuzzle";
+import { LoginRequiredBanner } from "@/components/login-required-banner";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -183,27 +184,33 @@ export function PuzzlesPage() {
 
               {/* Puzzle content */}
               <div className="p-6">
-                {puzzle.type === "word_match" && (
-                  <WordMatchPuzzle
-                    title=""
-                    pairs={(puzzle.data as { pairs: { term: string; definition: string }[] }).pairs}
-                    onComplete={(score) => handleComplete(puzzle.id, score)}
-                  />
-                )}
-                {puzzle.type === "fill_blank" && (
-                  <FillBlankPuzzle
-                    title=""
-                    questions={(puzzle.data as { questions: { sentence: string; answer: string; hint?: string }[] }).questions}
-                    onComplete={(score) => handleComplete(puzzle.id, score)}
-                  />
-                )}
-                {puzzle.type === "drag_order" && (
-                  <DragOrderPuzzle
-                    title=""
-                    items={(puzzle.data as { items: string[]; correctOrder: number[] }).items}
-                    correctOrder={(puzzle.data as { items: string[]; correctOrder: number[] }).correctOrder}
-                    onComplete={(score) => handleComplete(puzzle.id, score)}
-                  />
+                {!user ? (
+                  <LoginRequiredBanner action="attempt puzzles and earn XP" compact />
+                ) : (
+                  <>
+                    {puzzle.type === "word_match" && (
+                      <WordMatchPuzzle
+                        title=""
+                        pairs={(puzzle.data as { pairs: { term: string; definition: string }[] }).pairs}
+                        onComplete={(score) => handleComplete(puzzle.id, score)}
+                      />
+                    )}
+                    {puzzle.type === "fill_blank" && (
+                      <FillBlankPuzzle
+                        title=""
+                        questions={(puzzle.data as { questions: { sentence: string; answer: string; hint?: string }[] }).questions}
+                        onComplete={(score) => handleComplete(puzzle.id, score)}
+                      />
+                    )}
+                    {puzzle.type === "drag_order" && (
+                      <DragOrderPuzzle
+                        title=""
+                        items={(puzzle.data as { items: string[]; correctOrder: number[] }).items}
+                        correctOrder={(puzzle.data as { items: string[]; correctOrder: number[] }).correctOrder}
+                        onComplete={(score) => handleComplete(puzzle.id, score)}
+                      />
+                    )}
+                  </>
                 )}
               </div>
             </motion.div>

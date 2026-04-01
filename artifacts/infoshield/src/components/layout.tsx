@@ -14,6 +14,7 @@ import {
   LogOut,
   ChevronDown,
   LogIn,
+  Settings,
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -73,6 +74,12 @@ function UserMenu() {
             <div className="px-3 py-2 border-b border-border">
               <p className="text-[10px] text-muted-foreground truncate">{user.email}</p>
             </div>
+            <Link href="/profile" onClick={() => setOpen(false)}>
+              <button className="flex items-center gap-2 w-full px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors">
+                <Settings className="w-3.5 h-3.5" />
+                Profile Settings
+              </button>
+            </Link>
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 w-full px-3 py-2 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors"
@@ -242,15 +249,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 })}
               </nav>
 
-              <div className="p-3 border-t border-border">
+              <div className="p-3 border-t border-border space-y-1">
                 {user ? (
-                  <button
-                    onClick={handleMobileLogout}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 rounded-sm text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Sign Out
-                  </button>
+                  <>
+                    <Link href="/profile" onClick={() => setMobileMenuOpen(false)}>
+                      <button className="flex items-center gap-3 w-full px-4 py-2.5 rounded-sm text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
+                        <Settings className="w-4 h-4" />
+                        Profile Settings
+                      </button>
+                    </Link>
+                    <button
+                      onClick={handleMobileLogout}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 rounded-sm text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </>
                 ) : (
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
                     <button className="flex items-center gap-3 w-full px-4 py-2.5 rounded-sm text-sm text-primary font-semibold bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">

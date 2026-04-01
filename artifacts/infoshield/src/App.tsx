@@ -18,6 +18,7 @@ import { CaseStudyDetail } from "@/pages/case-study";
 import { Forum } from "@/pages/forum";
 import { ForumPostDetail } from "@/pages/forum-post";
 import { PuzzlesPage } from "@/pages/puzzles";
+import { ProfilePage } from "@/pages/profile";
 import { Login } from "@/pages/login";
 
 import NotFound from "@/pages/not-found";
@@ -27,26 +28,6 @@ const queryClient = new QueryClient({
     queries: { staleTime: 1000 * 30, retry: 1 },
   },
 });
-
-function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
-  const { user, loading } = useAuth();
-  const [, navigate] = useLocation();
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    navigate("/login");
-    return null;
-  }
-
-  return <Component />;
-}
 
 function LoginRoute() {
   const { user, loading } = useAuth();
@@ -83,7 +64,7 @@ function Router() {
     );
   }
 
-  // Login page renders without sidebar layout
+  // Login page renders without the sidebar layout
   if (location === "/login") {
     return <LoginRoute />;
   }
@@ -91,23 +72,21 @@ function Router() {
   return (
     <Layout>
       <Switch>
-        {/* Public routes */}
+        {/* All pages are publicly accessible */}
         <Route path="/" component={Home} />
+        <Route path="/learn" component={Learn} />
+        <Route path="/learn/:moduleId" component={ModuleDetail} />
+        <Route path="/learn/:moduleId/lesson/:lessonId" component={LessonDetail} />
+        <Route path="/quiz" component={QuizHub} />
+        <Route path="/quiz/:quizId" component={QuizDetail} />
+        <Route path="/puzzles" component={PuzzlesPage} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/badges" component={Badges} />
         <Route path="/case-studies" component={CaseStudies} />
         <Route path="/case-studies/:slug" component={CaseStudyDetail} />
         <Route path="/forum" component={Forum} />
         <Route path="/forum/:postId" component={ForumPostDetail} />
-
-        {/* Protected routes — redirect to /login if not authenticated */}
-        <Route path="/learn" component={() => <ProtectedRoute component={Learn} />} />
-        <Route path="/learn/:moduleId" component={() => <ProtectedRoute component={ModuleDetail} />} />
-        <Route path="/learn/:moduleId/lesson/:lessonId" component={() => <ProtectedRoute component={LessonDetail} />} />
-        <Route path="/quiz" component={() => <ProtectedRoute component={QuizHub} />} />
-        <Route path="/quiz/:quizId" component={() => <ProtectedRoute component={QuizDetail} />} />
-        <Route path="/puzzles" component={() => <ProtectedRoute component={PuzzlesPage} />} />
-        <Route path="/dashboard" component={() => <ProtectedRoute component={Dashboard} />} />
-        <Route path="/badges" component={() => <ProtectedRoute component={Badges} />} />
-
+        <Route path="/profile" component={ProfilePage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

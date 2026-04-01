@@ -6,6 +6,7 @@ import { DynamicIcon } from "@/lib/icon-map";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/context/auth";
+import { LoginRequiredBanner } from "@/components/login-required-banner";
 
 interface ResumeLesson {
   lessonId: number;
@@ -21,11 +22,27 @@ interface DashboardWithResume {
 }
 
 export function Dashboard() {
-  const { user } = useAuth();
-  const userId = user?.id ?? "guest-user";
+  const { user, loading } = useAuth();
+  const userId = user?.id ?? "";
   const { data: dashboardRaw, isLoading } = useGetDashboard(userId, {
-    query: { queryKey: getGetDashboardQueryKey(userId) }
+    query: { enabled: !!userId, queryKey: getGetDashboardQueryKey(userId) }
   });
+
+  if (loading) {
+    return <div className="p-10 text-center animate-pulse">Loading Command Center...</div>;
+  }
+
+  if (!user) {
+    return (
+      <div className="max-w-2xl mx-auto p-10 w-full">
+        <div className="mb-8">
+          <h1 className="text-4xl font-serif font-bold mb-2">Command Center</h1>
+          <p className="text-muted-foreground">Your personal intelligence dashboard</p>
+        </div>
+        <LoginRequiredBanner action="access your Command Center — track XP, level up, and see your progress" />
+      </div>
+    );
+  }
 
   if (isLoading) {
     return <div className="p-10 text-center animate-pulse">Loading Command Center...</div>;

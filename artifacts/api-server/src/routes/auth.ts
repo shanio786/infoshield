@@ -133,4 +133,38 @@ router.get("/auth/me", async (req, res) => {
   }
 });
 
+router.post("/auth/change-password", async (req, res) => {
+  if (!req.session.userId) {
+    res.status(401).json({ error: "Not authenticated" });
+    return;
+  }
+  try {
+    const { currentPassword, newPassword } = req.body as { currentPassword: string; newPassword: string };
+    if (!currentPassword || !newPassword) {
+      res.status(400).json({ error: "Current and new passwords are required" });
+      return;
+    }
+    if (newPassword.length < 6) {
+      res.status(400).json({ error: "Password must be at least 6 characters" });
+      return;
+    }
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.userId, req.session.userId));
+    if (!user || !user.passwordHash) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!valid) {
+      res.status(401).json({ error: "Current password is incorrect" });
+      return;
+    }
+    const newHash = await bcrypt.hash(newPassword, 12);
+    await db.update(usersTable).set({ passwordHash: newHash }).where(eq(usersTable.userId, user.userId));
+    res.json({ message: "Password updated" });
+  } catch (err) {
+    req.log.error({ err }, "Error changing password");
+    res.status(500).json({ error: "Failed to change password" });
+  }
+});
+
 export default router;

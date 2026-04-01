@@ -12,6 +12,7 @@ import { ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Clock } from "lucide
 import { Button } from "@/components/ui/button";
 import ReactMarkdown from "react-markdown";
 import { useAuth } from "@/context/auth";
+import { LoginRequiredBanner } from "@/components/login-required-banner";
 
 export function LessonDetail() {
   const params = useParams<{ moduleId: string; lessonId: string }>();
@@ -108,29 +109,44 @@ export function LessonDetail() {
               <ReactMarkdown>{lesson.content}</ReactMarkdown>
             </div>
 
-            <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex gap-4 w-full sm:w-auto">
-                {prevLesson && (
-                  <Link href={`/learn/${moduleId}/lesson/${prevLesson.id}`}>
-                    <Button variant="outline" className="w-full sm:w-auto">
-                      <ChevronLeft className="w-4 h-4 mr-2" />
-                      Previous
-                    </Button>
-                  </Link>
+            <div className="mt-16 pt-8 border-t border-border space-y-4">
+              {!user && (
+                <LoginRequiredBanner action="mark lessons complete and track your progress" compact />
+              )}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex gap-4 w-full sm:w-auto">
+                  {prevLesson && (
+                    <Link href={`/learn/${moduleId}/lesson/${prevLesson.id}`}>
+                      <Button variant="outline" className="w-full sm:w-auto">
+                        <ChevronLeft className="w-4 h-4 mr-2" />
+                        Previous
+                      </Button>
+                    </Link>
+                  )}
+                </div>
+
+                {user ? (
+                  <Button 
+                    onClick={handleMarkComplete} 
+                    disabled={completeMutation.isPending}
+                    className={`w-full sm:w-auto px-8 ${isCompleted ? 'bg-secondary text-foreground hover:bg-secondary/80' : ''}`}
+                  >
+                    {completeMutation.isPending ? "Logging..." : (
+                      isCompleted && nextLesson ? "Continue to Next" : 
+                      isCompleted ? "Return to Module" : "Mark as Cleared"
+                    )}
+                    {nextLesson && !isCompleted && <ChevronRight className="w-4 h-4 ml-2" />}
+                  </Button>
+                ) : (
+                  nextLesson && (
+                    <Link href={`/learn/${moduleId}/lesson/${nextLesson.id}`}>
+                      <Button variant="outline" className="w-full sm:w-auto px-8">
+                        Next Lesson <ChevronRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  )
                 )}
               </div>
-              
-              <Button 
-                onClick={handleMarkComplete} 
-                disabled={completeMutation.isPending}
-                className={`w-full sm:w-auto px-8 ${isCompleted ? 'bg-secondary text-foreground hover:bg-secondary/80' : ''}`}
-              >
-                {completeMutation.isPending ? "Logging..." : (
-                  isCompleted && nextLesson ? "Continue to Next" : 
-                  isCompleted ? "Return to Module" : "Mark as Cleared"
-                )}
-                {nextLesson && !isCompleted && <ChevronRight className="w-4 h-4 ml-2" />}
-              </Button>
             </div>
           </motion.div>
         </div>
