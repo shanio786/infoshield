@@ -72,6 +72,42 @@ router.get("/forum/posts/:postId", async (req, res) => {
   }
 });
 
+router.put("/forum/posts/:postId", async (req, res) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    const { title, content } = req.body as { title?: string; content?: string };
+    const updates: Partial<typeof forumPostsTable.$inferInsert> = {};
+    if (title !== undefined) updates.title = title;
+    if (content !== undefined) updates.content = content;
+
+    const [post] = await db
+      .update(forumPostsTable)
+      .set(updates)
+      .where(eq(forumPostsTable.id, postId))
+      .returning();
+    if (!post) {
+      res.status(404).json({ error: "Post not found" });
+      return;
+    }
+    res.json(post);
+  } catch (err) {
+    req.log.error({ err }, "Error updating forum post");
+    res.status(500).json({ error: "Failed to update post" });
+  }
+});
+
+router.delete("/forum/posts/:postId", async (req, res) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    await db.delete(forumRepliesTable).where(eq(forumRepliesTable.postId, postId));
+    await db.delete(forumPostsTable).where(eq(forumPostsTable.id, postId));
+    res.status(204).send();
+  } catch (err) {
+    req.log.error({ err }, "Error deleting forum post");
+    res.status(500).json({ error: "Failed to delete post" });
+  }
+});
+
 router.post("/forum/posts/:postId/replies", async (req, res) => {
   try {
     const postId = parseInt(req.params.postId);
@@ -88,6 +124,37 @@ router.post("/forum/posts/:postId/replies", async (req, res) => {
   } catch (err) {
     req.log.error({ err }, "Error creating forum reply");
     res.status(500).json({ error: "Failed to create reply" });
+  }
+});
+
+router.put("/forum/posts/:postId/replies/:replyId", async (req, res) => {
+  try {
+    const replyId = parseInt(req.params.replyId);
+    const { content } = req.body as { content: string };
+    const [reply] = await db
+      .update(forumRepliesTable)
+      .set({ content })
+      .where(eq(forumRepliesTable.id, replyId))
+      .returning();
+    if (!reply) {
+      res.status(404).json({ error: "Reply not found" });
+      return;
+    }
+    res.json(reply);
+  } catch (err) {
+    req.log.error({ err }, "Error updating reply");
+    res.status(500).json({ error: "Failed to update reply" });
+  }
+});
+
+router.delete("/forum/posts/:postId/replies/:replyId", async (req, res) => {
+  try {
+    const replyId = parseInt(req.params.replyId);
+    await db.delete(forumRepliesTable).where(eq(forumRepliesTable.id, replyId));
+    res.status(204).send();
+  } catch (err) {
+    req.log.error({ err }, "Error deleting reply");
+    res.status(500).json({ error: "Failed to delete reply" });
   }
 });
 

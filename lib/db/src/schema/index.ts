@@ -5,3 +5,4 @@ export * from "./badges";
 export * from "./progress";
 export * from "./forum";
 export * from "./caseStudies";
+export * from "./users";

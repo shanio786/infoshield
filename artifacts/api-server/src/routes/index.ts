@@ -8,6 +8,7 @@ import progressRouter from "./progress";
 import dashboardRouter from "./dashboard";
 import forumRouter from "./forum";
 import caseStudiesRouter from "./caseStudies";
+import usersRouter from "./users";
 
 const router: IRouter = Router();
 
@@ -20,5 +21,6 @@ router.use(progressRouter);
 router.use(dashboardRouter);
 router.use(forumRouter);
 router.use(caseStudiesRouter);
+router.use(usersRouter);
 
 export default router;

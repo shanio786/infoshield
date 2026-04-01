@@ -1,19 +1,18 @@
 import * as LucideIcons from "lucide-react";
 import type { LucideProps } from "lucide-react";
 
-type IconName = keyof typeof LucideIcons;
-
 interface DynamicIconProps extends LucideProps {
   name: string;
-  fallback?: IconName;
+  fallback?: string;
 }
 
 export function DynamicIcon({ name, fallback = "Circle", ...props }: DynamicIconProps) {
-  const IconComponent = (LucideIcons as Record<string, React.ComponentType<LucideProps>>)[name];
-  const Fallback = (LucideIcons as Record<string, React.ComponentType<LucideProps>>)[fallback];
+  const icons = LucideIcons as unknown as Record<string, React.ComponentType<LucideProps>>;
+  const IconComponent = icons[name];
+  const FallbackIcon = icons[fallback] ?? icons["Circle"];
 
   if (IconComponent) {
     return <IconComponent {...props} />;
   }
-  return <Fallback {...props} />;
+  return <FallbackIcon {...props} />;
 }
