@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "InfoShield"
+version = "1.0.0"
+id = "artifacts/infoshield"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22782
+
+[services.development]
+run = "pnpm --filter @workspace/infoshield run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/infoshield", "run", "build" ]
+publicDir = "artifacts/infoshield/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22782"
+BASE_PATH = "/"

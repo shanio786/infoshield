@@ -1,22 +1,37 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: InfoShield API - Information Warfare Learning App
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: modules
+    description: Learning module operations
+  - name: lessons
+    description: Lesson operations
+  - name: quizzes
+    description: Quiz operations
+  - name: badges
+    description: Badge operations
+  - name: progress
+    description: User progress operations
+  - name: forum
+    description: Forum operations
+  - name: dashboard
+    description: Dashboard summary operations
+  - name: casestudies
+    description: Case study operations
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +39,367 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /modules:
+    get:
+      operationId: listModules
+      tags: [modules]
+      summary: List all learning modules
+      responses:
+        "200":
+          description: List of modules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Module"
+
+  /modules/{moduleId}:
+    get:
+      operationId: getModule
+      tags: [modules]
+      summary: Get a single module with its lessons
+      parameters:
+        - name: moduleId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Module with lessons
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModuleWithLessons"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /lessons/{lessonId}:
+    get:
+      operationId: getLesson
+      tags: [lessons]
+      summary: Get a single lesson
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lesson content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lesson"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /quizzes:
+    get:
+      operationId: listQuizzes
+      tags: [quizzes]
+      summary: List all quizzes
+      parameters:
+        - name: moduleId
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of quizzes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quiz"
+
+  /quizzes/{quizId}:
+    get:
+      operationId: getQuiz
+      tags: [quizzes]
+      summary: Get quiz with questions
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Quiz with questions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizWithQuestions"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /quizzes/{quizId}/submit:
+    post:
+      operationId: submitQuiz
+      tags: [quizzes]
+      summary: Submit quiz answers and get results
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuizSubmission"
+      responses:
+        "200":
+          description: Quiz result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResult"
+
+  /badges:
+    get:
+      operationId: listBadges
+      tags: [badges]
+      summary: List all badges
+      responses:
+        "200":
+          description: List of badges
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Badge"
+
+  /progress/{userId}:
+    get:
+      operationId: getUserProgress
+      tags: [progress]
+      summary: Get user progress
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User progress
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProgress"
+
+  /progress/{userId}/complete-lesson:
+    post:
+      operationId: completeLesson
+      tags: [progress]
+      summary: Mark a lesson as complete
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteLessonBody"
+      responses:
+        "200":
+          description: Updated progress
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProgress"
+
+  /dashboard/{userId}:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get dashboard summary for a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/stats:
+    get:
+      operationId: getGlobalStats
+      tags: [dashboard]
+      summary: Get global platform statistics
+      responses:
+        "200":
+          description: Global stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalStats"
+
+  /forum/posts:
+    get:
+      operationId: listForumPosts
+      tags: [forum]
+      summary: List forum posts
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Forum posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ForumPost"
+    post:
+      operationId: createForumPost
+      tags: [forum]
+      summary: Create a forum post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateForumPostBody"
+      responses:
+        "201":
+          description: Created post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumPost"
+
+  /forum/posts/{postId}:
+    get:
+      operationId: getForumPost
+      tags: [forum]
+      summary: Get forum post with replies
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Forum post with replies
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumPostWithReplies"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /forum/posts/{postId}/replies:
+    post:
+      operationId: createForumReply
+      tags: [forum]
+      summary: Create a reply to a forum post
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateForumReplyBody"
+      responses:
+        "201":
+          description: Created reply
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumReply"
+
+  /case-studies:
+    get:
+      operationId: listCaseStudies
+      tags: [casestudies]
+      summary: List all case studies
+      responses:
+        "200":
+          description: List of case studies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseStudy"
+
+  /case-studies/{slug}:
+    get:
+      operationId: getCaseStudy
+      tags: [casestudies]
+      summary: Get a case study by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Case study
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseStudy"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +410,567 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    Module:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        level:
+          type: integer
+        icon:
+          type: string
+        lessonCount:
+          type: integer
+        estimatedMinutes:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - description
+        - level
+        - icon
+        - lessonCount
+        - estimatedMinutes
+        - createdAt
+
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: integer
+        moduleId:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        orderIndex:
+          type: integer
+        estimatedMinutes:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - moduleId
+        - title
+        - content
+        - orderIndex
+        - estimatedMinutes
+        - createdAt
+
+    ModuleWithLessons:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        level:
+          type: integer
+        icon:
+          type: string
+        estimatedMinutes:
+          type: integer
+        lessons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lesson"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - description
+        - level
+        - icon
+        - estimatedMinutes
+        - lessons
+        - createdAt
+
+    Quiz:
+      type: object
+      properties:
+        id:
+          type: integer
+        moduleId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        questionCount:
+          type: integer
+        passingScore:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - moduleId
+        - title
+        - description
+        - questionCount
+        - passingScore
+        - createdAt
+
+    QuizQuestion:
+      type: object
+      properties:
+        id:
+          type: integer
+        quizId:
+          type: integer
+        question:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        hint:
+          type: string
+        orderIndex:
+          type: integer
+      required:
+        - id
+        - quizId
+        - question
+        - options
+        - orderIndex
+
+    QuizWithQuestions:
+      type: object
+      properties:
+        id:
+          type: integer
+        moduleId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        passingScore:
+          type: integer
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuizQuestion"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - moduleId
+        - title
+        - description
+        - passingScore
+        - questions
+        - createdAt
+
+    QuizSubmission:
+      type: object
+      properties:
+        userId:
+          type: string
+        answers:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: integer
+              selectedOption:
+                type: integer
+            required:
+              - questionId
+              - selectedOption
+      required:
+        - userId
+        - answers
+
+    QuizResult:
+      type: object
+      properties:
+        quizId:
+          type: integer
+        userId:
+          type: string
+        score:
+          type: integer
+        totalQuestions:
+          type: integer
+        passed:
+          type: boolean
+        xpEarned:
+          type: integer
+        badgesEarned:
+          type: array
+          items:
+            $ref: "#/components/schemas/Badge"
+        answerFeedback:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: integer
+              correct:
+                type: boolean
+              correctOption:
+                type: integer
+              explanation:
+                type: string
+            required:
+              - questionId
+              - correct
+              - correctOption
+      required:
+        - quizId
+        - userId
+        - score
+        - totalQuestions
+        - passed
+        - xpEarned
+        - badgesEarned
+        - answerFeedback
+
+    Badge:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        rarity:
+          type: string
+          enum: [common, uncommon, rare, legendary]
+        xpValue:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - description
+        - icon
+        - rarity
+        - xpValue
+        - createdAt
+
+    UserProgress:
+      type: object
+      properties:
+        userId:
+          type: string
+        totalXp:
+          type: integer
+        level:
+          type: integer
+        completedLessons:
+          type: array
+          items:
+            type: integer
+        completedModules:
+          type: array
+          items:
+            type: integer
+        earnedBadges:
+          type: array
+          items:
+            $ref: "#/components/schemas/Badge"
+        quizAttempts:
+          type: array
+          items:
+            type: object
+            properties:
+              quizId:
+                type: integer
+              score:
+                type: integer
+              passed:
+                type: boolean
+              attemptedAt:
+                type: string
+                format: date-time
+            required:
+              - quizId
+              - score
+              - passed
+              - attemptedAt
+      required:
+        - userId
+        - totalXp
+        - level
+        - completedLessons
+        - completedModules
+        - earnedBadges
+        - quizAttempts
+
+    CompleteLessonBody:
+      type: object
+      properties:
+        lessonId:
+          type: integer
+        moduleId:
+          type: integer
+      required:
+        - lessonId
+        - moduleId
+
+    DashboardSummary:
+      type: object
+      properties:
+        userId:
+          type: string
+        totalXp:
+          type: integer
+        level:
+          type: integer
+        modulesCompleted:
+          type: integer
+        modulesTotal:
+          type: integer
+        lessonsCompleted:
+          type: integer
+        lessonsTotal:
+          type: integer
+        quizzesPassed:
+          type: integer
+        badgesEarned:
+          type: integer
+        currentStreak:
+          type: integer
+        recentActivity:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              description:
+                type: string
+              timestamp:
+                type: string
+                format: date-time
+            required:
+              - type
+              - description
+              - timestamp
+        nextModule:
+          $ref: "#/components/schemas/Module"
+      required:
+        - userId
+        - totalXp
+        - level
+        - modulesCompleted
+        - modulesTotal
+        - lessonsCompleted
+        - lessonsTotal
+        - quizzesPassed
+        - badgesEarned
+        - currentStreak
+        - recentActivity
+
+    GlobalStats:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        totalLessonsCompleted:
+          type: integer
+        totalQuizzesTaken:
+          type: integer
+        totalBadgesAwarded:
+          type: integer
+        topBadges:
+          type: array
+          items:
+            $ref: "#/components/schemas/Badge"
+      required:
+        - totalUsers
+        - totalLessonsCompleted
+        - totalQuizzesTaken
+        - totalBadgesAwarded
+        - topBadges
+
+    ForumPost:
+      type: object
+      properties:
+        id:
+          type: integer
+        authorName:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        replyCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - authorName
+        - userId
+        - title
+        - content
+        - replyCount
+        - createdAt
+
+    ForumReply:
+      type: object
+      properties:
+        id:
+          type: integer
+        postId:
+          type: integer
+        authorName:
+          type: string
+        userId:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - postId
+        - authorName
+        - userId
+        - content
+        - createdAt
+
+    ForumPostWithReplies:
+      type: object
+      properties:
+        id:
+          type: integer
+        authorName:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        replies:
+          type: array
+          items:
+            $ref: "#/components/schemas/ForumReply"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - authorName
+        - userId
+        - title
+        - content
+        - replies
+        - createdAt
+
+    CreateForumPostBody:
+      type: object
+      properties:
+        authorName:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+      required:
+        - authorName
+        - userId
+        - title
+        - content
+
+    CreateForumReplyBody:
+      type: object
+      properties:
+        authorName:
+          type: string
+        userId:
+          type: string
+        content:
+          type: string
+      required:
+        - authorName
+        - userId
+        - content
+
+    CaseStudy:
+      type: object
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        title:
+          type: string
+        subtitle:
+          type: string
+        year:
+          type: integer
+        category:
+          type: string
+        summary:
+          type: string
+        content:
+          type: string
+        impact:
+          type: string
+        lessons:
+          type: array
+          items:
+            type: string
+        sources:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - slug
+        - title
+        - subtitle
+        - year
+        - category
+        - summary
+        - content
+        - impact
+        - lessons
+        - sources
+        - createdAt

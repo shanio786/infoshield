@@ -1,96 +1,102 @@
-# Workspace
+# InfoShield — Information Warfare Educational App
+
+**University of Canberra Project ID:** 2026-S1-35  
+**Developer:** Muhammad Shafi  
+**Sponsor:** OnFact (moin@onfact.xyz)  
+**Supervisor:** Abu Barkat Ullah
 
 ## Overview
 
-pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
+InfoShield is a complete interactive educational web application about information warfare and disinformation. Users learn through structured modules, take knowledge-check quizzes, earn XP and badges, explore real Australian case studies, and participate in community forum discussions.
 
-## Stack
+## Architecture
 
-- **Monorepo tool**: pnpm workspaces
-- **Node.js version**: 24
-- **Package manager**: pnpm
-- **TypeScript version**: 5.9
-- **API framework**: Express 5
-- **Database**: PostgreSQL + Drizzle ORM
-- **Validation**: Zod (`zod/v4`), `drizzle-zod`
-- **API codegen**: Orval (from OpenAPI spec)
-- **Build**: esbuild (CJS bundle)
+This is a pnpm monorepo with three main artifacts:
 
-## Structure
-
-```text
-artifacts-monorepo/
-├── artifacts/              # Deployable applications
-│   └── api-server/         # Express API server
-├── lib/                    # Shared libraries
-│   ├── api-spec/           # OpenAPI spec + Orval codegen config
-│   ├── api-client-react/   # Generated React Query hooks
-│   ├── api-zod/            # Generated Zod schemas from OpenAPI
-│   └── db/                 # Drizzle ORM schema + DB connection
-├── scripts/                # Utility scripts (single workspace package)
-│   └── src/                # Individual .ts scripts, run via `pnpm --filter @workspace/scripts run <script>`
-├── pnpm-workspace.yaml     # pnpm workspace (artifacts/*, lib/*, lib/integrations/*, scripts)
-├── tsconfig.base.json      # Shared TS options (composite, bundler resolution, es2022)
-├── tsconfig.json           # Root TS project references
-└── package.json            # Root package with hoisted devDeps
+```
+artifacts/
+  api-server/     — Express.js REST API (port 8080)
+  infoshield/     — React + Vite frontend (served at /)
+  mockup-sandbox/ — Canvas design preview server
+lib/
+  api-spec/       — OpenAPI YAML + generated React Query hooks
+  db/             — Drizzle ORM schema + PostgreSQL connection
+scripts/          — Seed script for initial data
 ```
 
-## TypeScript & Composite Projects
+## Key Technical Decisions
 
-Every package extends `tsconfig.base.json` which sets `composite: true`. The root `tsconfig.json` lists all packages as project references. This means:
+- **No authentication** — uses a fixed `guest-user` ID for all progress tracking
+- **API client** — auto-generated from OpenAPI spec via `@workspace/api-client-react` with React Query hooks
+- **Icons** — stored as string names (e.g., "BookOpen") in DB; rendered via `DynamicIcon` component in `src/lib/icon-map.tsx`
+- **Markdown** — lesson content and case studies are stored as markdown, rendered via `react-markdown`
 
-- **Always typecheck from the root** — run `pnpm run typecheck` (which runs `tsc --build --emitDeclarationOnly`). This builds the full dependency graph so that cross-package imports resolve correctly. Running `tsc` inside a single package will fail if its dependencies haven't been built yet.
-- **`emitDeclarationOnly`** — we only emit `.d.ts` files during typecheck; actual JS bundling is handled by esbuild/tsx/vite...etc, not `tsc`.
-- **Project references** — when package A depends on package B, A's `tsconfig.json` must list B in its `references` array. `tsc --build` uses this to determine build order and skip up-to-date packages.
+## Frontend Pages
 
-## Root Scripts
+| Route | Component | Description |
+|-------|-----------|-------------|
+| `/` | Home | Cinematic hero with global stats |
+| `/learn` | Learn | Module listing with icons + levels |
+| `/learn/:id` | ModuleDetail | Lesson list timeline view |
+| `/learn/:moduleId/lesson/:lessonId` | LessonDetail | Markdown lesson content + Mark as Complete |
+| `/quiz` | QuizHub | Quiz card listing |
+| `/quiz/:id` | QuizDetail | Interactive multi-step quiz with scoring |
+| `/dashboard` | Dashboard | XP, levels, progress, recommended module |
+| `/badges` | Badges | Earned + locked badge showcase |
+| `/case-studies` | CaseStudies | Australian disinformation case study cards |
+| `/case-studies/:slug` | CaseStudyDetail | Full case study with markdown content |
+| `/forum` | Forum | Community discussion board |
+| `/forum/:postId` | ForumPostDetail | Individual post with replies |
 
-- `pnpm run build` — runs `typecheck` first, then recursively runs `build` in all packages that define it
-- `pnpm run typecheck` — runs `tsc --build --emitDeclarationOnly` using project references
+## API Endpoints
 
-## Packages
+All endpoints prefixed with `/api/`:
 
-### `artifacts/api-server` (`@workspace/api-server`)
+- `GET /modules` — list all 5 learning modules
+- `GET /modules/:id` — module with lessons
+- `GET /lessons/:id` — full lesson content (markdown)
+- `POST /lessons/:id/complete` — mark lesson complete, award XP
+- `GET /quizzes` — list all quizzes
+- `GET /quizzes/:id` — quiz with questions (no correct answers)
+- `POST /quizzes/:quizId/submit` — submit answers, get score + badges
+- `GET /badges` — all badges
+- `GET /progress/:userId` — user's completed lessons + earned badges
+- `GET /dashboard/:userId` — full dashboard data (XP, level, activity)
+- `GET /dashboard/stats` — global platform stats
+- `GET /case-studies` — list case studies
+- `GET /case-studies/:slug` — full case study
+- `GET /forum` — forum posts
+- `GET /forum/:postId` — post with replies
+- `POST /forum` — create new post
+- `POST /forum/:postId/reply` — add reply
 
-Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` for request and response validation and `@workspace/db` for persistence.
+## Database Schema (PostgreSQL via Drizzle ORM)
 
-- Entry: `src/index.ts` — reads `PORT`, starts Express
-- App setup: `src/app.ts` — mounts CORS, JSON/urlencoded parsing, routes at `/api`
-- Routes: `src/routes/index.ts` mounts sub-routers; `src/routes/health.ts` exposes `GET /health` (full path: `/api/health`)
-- Depends on: `@workspace/db`, `@workspace/api-zod`
-- `pnpm --filter @workspace/api-server run dev` — run the dev server
-- `pnpm --filter @workspace/api-server run build` — production esbuild bundle (`dist/index.cjs`)
-- Build bundles an allowlist of deps (express, cors, pg, drizzle-orm, zod, etc.) and externalizes the rest
+Tables: `modules`, `lessons`, `quizzes`, `quiz_questions`, `quiz_attempts`, `badges`, `user_badges`, `user_xp`, `user_progress`, `forum_posts`, `forum_replies`, `case_studies`
 
-### `lib/db` (`@workspace/db`)
+## Seed Data
 
-Database layer using Drizzle ORM with PostgreSQL. Exports a Drizzle client instance and schema models.
+Run `pnpm --filter @workspace/scripts run seed` to populate:
+- 5 learning modules (Understanding Misinformation → Coordinated Influence Operations)
+- 9 lessons with rich Australian-context content
+- 3 quizzes with 10 total questions
+- 7 badges (common → legendary)
+- 2 case studies: 2019 Death Tax Campaign, 2023 Voice Referendum Disinformation
 
-- `src/index.ts` — creates a `Pool` + Drizzle instance, exports schema
-- `src/schema/index.ts` — barrel re-export of all models
-- `src/schema/<modelname>.ts` — table definitions with `drizzle-zod` insert schemas (no models definitions exist right now)
-- `drizzle.config.ts` — Drizzle Kit config (requires `DATABASE_URL`, automatically provided by Replit)
-- Exports: `.` (pool, db, schema), `./schema` (schema only)
+## Design
 
-Production migrations are handled by Replit when publishing. In development, we just use `pnpm --filter @workspace/db run push`, and we fallback to `pnpm --filter @workspace/db run push-force`.
+- Dark navy/slate theme (`#0b1120` background, `#38bdf8` electric blue primary)
+- Inter (body) + Playfair Display (headings) via Google Fonts
+- Framer Motion animations throughout
+- Intelligence briefing aesthetic ("Command Center", "Clearance: Guest", "Commence Briefing")
+- Responsive with sidebar (desktop) / top nav (mobile)
 
-### `lib/api-spec` (`@workspace/api-spec`)
+## Running Locally
 
-Owns the OpenAPI 3.1 spec (`openapi.yaml`) and the Orval config (`orval.config.ts`). Running codegen produces output into two sibling packages:
+```bash
+# Start API server
+pnpm --filter @workspace/api-server run dev
 
-1. `lib/api-client-react/src/generated/` — React Query hooks + fetch client
-2. `lib/api-zod/src/generated/` — Zod schemas
-
-Run codegen: `pnpm --filter @workspace/api-spec run codegen`
-
-### `lib/api-zod` (`@workspace/api-zod`)
-
-Generated Zod schemas from the OpenAPI spec (e.g. `HealthCheckResponse`). Used by `api-server` for response validation.
-
-### `lib/api-client-react` (`@workspace/api-client-react`)
-
-Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHealthCheck`, `healthCheck`).
-
-### `scripts` (`@workspace/scripts`)
-
-Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.
+# Start frontend
+pnpm --filter @workspace/infoshield run dev
+```
