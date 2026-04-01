@@ -47,7 +47,7 @@ pnpm --filter @workspace/db run push
 
 # 5. Seed data
 echo "Seeding data..."
-cd /www/wwwroot/infoshield && node_modules/.bin/tsx scripts/src/seed.ts
+pnpm --filter @workspace/scripts run seed
 
 # 6. Build frontend
 echo "Building frontend..."
