@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import { useGetGlobalStats, getGetGlobalStatsQueryKey } from "@workspace/api-client-react";
-import { ShieldAlert, Users, Award, Target, ArrowRight, type LucideIcon } from "lucide-react";
+import { ShieldAlert, Users, Award, Target, ArrowRight, type LucideIcon, LogIn } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/auth";
 
 export function Home() {
+  const { user } = useAuth();
   const { data: stats, isLoading } = useGetGlobalStats({
     query: { queryKey: getGetGlobalStatsQueryKey() }
   });
@@ -36,18 +38,47 @@ export function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/learn">
-              <Button size="lg" className="h-12 px-8 text-base font-medium rounded-sm w-full sm:w-auto">
-                Begin Briefing
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-            <Link href="/case-studies">
-              <Button size="lg" variant="outline" className="h-12 px-8 text-base font-medium rounded-sm w-full sm:w-auto border-border hover:bg-secondary">
-                View Case Studies
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <Link href="/learn">
+                  <Button size="lg" className="h-12 px-8 text-base font-medium rounded-sm w-full sm:w-auto">
+                    Continue Briefing
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+                <Link href="/dashboard">
+                  <Button size="lg" variant="outline" className="h-12 px-8 text-base font-medium rounded-sm w-full sm:w-auto border-border hover:bg-secondary">
+                    Command Center
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button size="lg" className="h-12 px-8 text-base font-medium rounded-sm w-full sm:w-auto">
+                    <LogIn className="mr-2 w-5 h-5" />
+                    Sign In / Register
+                  </Button>
+                </Link>
+                <Link href="/case-studies">
+                  <Button size="lg" variant="outline" className="h-12 px-8 text-base font-medium rounded-sm w-full sm:w-auto border-border hover:bg-secondary">
+                    View Case Studies
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
+
+          {!user && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="mt-6 text-sm text-muted-foreground"
+            >
+              Free to join · Track your progress · Earn badges
+            </motion.p>
+          )}
         </motion.div>
       </section>
 

@@ -13,6 +13,7 @@ import {
   Puzzle,
   LogOut,
   ChevronDown,
+  LogIn,
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -33,9 +34,16 @@ const NAV_ITEMS = [
 function UserMenu() {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const [, navigate] = useLocation();
   if (!user) return null;
 
   const initials = user.displayName.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+
+  const handleLogout = async () => {
+    setOpen(false);
+    await logout();
+    navigate("/");
+  };
 
   return (
     <div className="relative">
@@ -66,7 +74,7 @@ function UserMenu() {
               <p className="text-[10px] text-muted-foreground truncate">{user.email}</p>
             </div>
             <button
-              onClick={() => { logout(); setOpen(false); }}
+              onClick={handleLogout}
               className="flex items-center gap-2 w-full px-3 py-2 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors"
             >
               <LogOut className="w-3.5 h-3.5" />
@@ -80,11 +88,17 @@ function UserMenu() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
+  const [location, navTo] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
 
   const initials = user?.displayName.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase() ?? "?";
+
+  const handleMobileLogout = async () => {
+    setMobileMenuOpen(false);
+    await logout();
+    navTo("/");
+  };
 
   return (
     <div className="min-h-[100dvh] flex w-full bg-background text-foreground overflow-hidden">
@@ -138,7 +152,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">System Online</span>
             </div>
           </div>
-          <UserMenu />
+          {user ? (
+            <UserMenu />
+          ) : (
+            <Link href="/login">
+              <button className="flex items-center gap-2 px-2 py-2 rounded-sm hover:bg-primary/10 transition-colors w-full text-left group border border-primary/20 bg-primary/5">
+                <div className="w-7 h-7 rounded-sm bg-primary/20 border border-primary/30 flex items-center justify-center shrink-0">
+                  <LogIn className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-primary">Sign In / Register</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Access your account</p>
+                </div>
+              </button>
+            </Link>
+          )}
         </div>
       </aside>
 
@@ -215,13 +243,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </nav>
 
               <div className="p-3 border-t border-border">
-                <button
-                  onClick={() => { logout(); setMobileMenuOpen(false); }}
-                  className="flex items-center gap-3 w-full px-4 py-2.5 rounded-sm text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Sign Out
-                </button>
+                {user ? (
+                  <button
+                    onClick={handleMobileLogout}
+                    className="flex items-center gap-3 w-full px-4 py-2.5 rounded-sm text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                ) : (
+                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                    <button className="flex items-center gap-3 w-full px-4 py-2.5 rounded-sm text-sm text-primary font-semibold bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">
+                      <LogIn className="w-4 h-4" />
+                      Sign In / Register
+                    </button>
+                  </Link>
+                )}
               </div>
             </motion.div>
           </>

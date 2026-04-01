@@ -1,4 +1,4 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,40 +28,86 @@ const queryClient = new QueryClient({
   },
 });
 
-function Router() {
+function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
   const { user, loading } = useAuth();
+  const [, navigate] = useLocation();
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-background">
-        <div className="flex flex-col items-center gap-4 text-muted-foreground">
-          <div className="w-10 h-10 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
-          <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground">Authenticating</span>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!user) {
-    return <Login />;
+    navigate("/login");
+    return null;
+  }
+
+  return <Component />;
+}
+
+function LoginRoute() {
+  const { user, loading } = useAuth();
+  const [, navigate] = useLocation();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (user) {
+    navigate("/");
+    return null;
+  }
+
+  return <Login />;
+}
+
+function Router() {
+  const { loading } = useAuth();
+  const [location] = useLocation();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+          <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Login page renders without sidebar layout
+  if (location === "/login") {
+    return <LoginRoute />;
   }
 
   return (
     <Layout>
       <Switch>
+        {/* Public routes */}
         <Route path="/" component={Home} />
-        <Route path="/learn" component={Learn} />
-        <Route path="/learn/:moduleId" component={ModuleDetail} />
-        <Route path="/learn/:moduleId/lesson/:lessonId" component={LessonDetail} />
-        <Route path="/quiz" component={QuizHub} />
-        <Route path="/quiz/:quizId" component={QuizDetail} />
-        <Route path="/puzzles" component={PuzzlesPage} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/badges" component={Badges} />
         <Route path="/case-studies" component={CaseStudies} />
         <Route path="/case-studies/:slug" component={CaseStudyDetail} />
         <Route path="/forum" component={Forum} />
         <Route path="/forum/:postId" component={ForumPostDetail} />
+
+        {/* Protected routes — redirect to /login if not authenticated */}
+        <Route path="/learn" component={() => <ProtectedRoute component={Learn} />} />
+        <Route path="/learn/:moduleId" component={() => <ProtectedRoute component={ModuleDetail} />} />
+        <Route path="/learn/:moduleId/lesson/:lessonId" component={() => <ProtectedRoute component={LessonDetail} />} />
+        <Route path="/quiz" component={() => <ProtectedRoute component={QuizHub} />} />
+        <Route path="/quiz/:quizId" component={() => <ProtectedRoute component={QuizDetail} />} />
+        <Route path="/puzzles" component={() => <ProtectedRoute component={PuzzlesPage} />} />
+        <Route path="/dashboard" component={() => <ProtectedRoute component={Dashboard} />} />
+        <Route path="/badges" component={() => <ProtectedRoute component={Badges} />} />
+
         <Route component={NotFound} />
       </Switch>
     </Layout>
