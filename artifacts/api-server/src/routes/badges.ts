@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { db } from "@workspace/db";
 import { badgesTable, userBadgesTable } from "@workspace/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 const router: IRouter = Router();
 
@@ -99,7 +99,7 @@ router.delete("/user-badges/:userId/:badgeId", async (req, res) => {
   try {
     const { userId, badgeId } = req.params;
     const bid = parseInt(badgeId);
-    await db.delete(userBadgesTable).where(eq(userBadgesTable.userId, userId));
+    await db.delete(userBadgesTable).where(and(eq(userBadgesTable.userId, userId), eq(userBadgesTable.badgeId, bid)));
     res.status(204).send();
   } catch (err) {
     res.status(500).json({ error: "Failed to revoke badge" });

@@ -293,7 +293,7 @@ router.get("/quizzes/attempts/:userId", async (req, res) => {
   }
 });
 
-router.delete("/quizzes/attempts/:attemptId", async (req, res) => {
+router.delete("/quizzes/attempts/record/:attemptId", async (req, res) => {
   try {
     const attemptId = parseInt(req.params.attemptId);
     await db.delete(quizAttemptsTable).where(eq(quizAttemptsTable.id, attemptId));
