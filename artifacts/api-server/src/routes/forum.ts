@@ -85,10 +85,11 @@ router.get("/forum/posts/:postId", async (req, res) => {
 router.put("/forum/posts/:postId", async (req, res) => {
   try {
     const postId = parseInt(req.params.postId);
-    const { title, content } = req.body as { title?: string; content?: string };
+    const { title, body: bodyText, content } = req.body as { title?: string; body?: string; content?: string };
     const updates: Partial<typeof forumPostsTable.$inferInsert> = {};
     if (title !== undefined) updates.title = title;
-    if (content !== undefined) updates.content = content;
+    const newContent = bodyText ?? content;
+    if (newContent !== undefined) updates.content = newContent;
 
     const [post] = await db
       .update(forumPostsTable)
@@ -140,10 +141,11 @@ router.post("/forum/posts/:postId/replies", async (req, res) => {
 router.put("/forum/posts/:postId/replies/:replyId", async (req, res) => {
   try {
     const replyId = parseInt(req.params.replyId);
-    const { content } = req.body as { content: string };
+    const { body: bodyText, content } = req.body as { body?: string; content?: string };
+    const newContent = bodyText ?? content ?? "";
     const [reply] = await db
       .update(forumRepliesTable)
-      .set({ content })
+      .set({ content: newContent })
       .where(eq(forumRepliesTable.id, replyId))
       .returning();
     if (!reply) {
