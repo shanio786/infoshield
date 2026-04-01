@@ -36,6 +36,9 @@ echo "Installing packages..."
 pnpm config set registry https://registry.npmjs.org 2>/dev/null || true
 pnpm install
 
+# Load .env variables
+export $(grep -v '^#' .env | xargs)
+
 # 4. Database tables
 echo "Creating tables..."
 pnpm --filter @workspace/db run push
