@@ -7,7 +7,7 @@
 
 ## Overview
 
-InfoShield is a complete interactive educational web application about information warfare and disinformation. Users learn through structured modules, take knowledge-check quizzes, earn XP and badges, explore real Australian case studies, and participate in community forum discussions.
+InfoShield is a complete interactive educational web application about information warfare and disinformation. Users register/login, learn through structured modules, complete interactive puzzles, take knowledge-check quizzes, earn XP and badges, explore real Australian case studies, and participate in community forum discussions.
 
 ## Architecture
 
@@ -26,77 +26,120 @@ scripts/          — Seed script for initial data
 
 ## Key Technical Decisions
 
-- **No authentication** — uses a fixed `guest-user` ID for all progress tracking
+- **Email/Password Authentication** — bcryptjs + express-session + connect-pg-simple
+  - Session cookie: `infoshield.sid`
+  - `SESSION_SECRET` env var (defaults to `infoshield-dev-secret-2026`)
+  - `AuthProvider` + `useAuth` hook in `src/context/auth.tsx`
+  - Login page in `src/pages/login.tsx` (shows when not authenticated)
 - **API client** — auto-generated from OpenAPI spec via `@workspace/api-client-react` with React Query hooks
-- **Icons** — stored as string names (e.g., "BookOpen") in DB; rendered via `DynamicIcon` component in `src/lib/icon-map.tsx`
-- **Markdown** — lesson content and case studies are stored as markdown, rendered via `react-markdown`
+- **Session type** — Extended in `src/types/session.d.ts` to include `userId` and `displayName`
+- **UI theme** — Dark navy/slate + electric cyan (#00e5ff), intelligence briefing aesthetic
+- **No mocked data** — all content is seeded to PostgreSQL via `scripts/seed.ts`
+
+## Database Schema
+
+Tables in PostgreSQL (managed by Drizzle ORM):
+
+| Table | Purpose |
+|-------|---------|
+| `users` | User accounts (userId, displayName, email, password_hash, role) |
+| `modules` | Learning modules (title, description, icon, order) |
+| `lessons` | Lessons within modules (title, content, xpReward, order) |
+| `quizzes` | Module quizzes |
+| `quiz_questions` | Individual quiz questions |
+| `quiz_attempts` | User quiz attempt records |
+| `user_progress` | Lesson completion tracking |
+| `user_xp` | XP and level per user |
+| `user_badges` | Earned badge records |
+| `badges` | Badge definitions |
+| `forum_posts` | Discussion forum posts |
+| `forum_replies` | Forum post replies |
+| `case_studies` | Australian disinformation case studies |
+| `puzzles` | Interactive puzzle definitions |
+| `puzzle_completions` | User puzzle completion records |
+
+## API Routes
+
+All routes are under `/api/`:
+
+- `POST /auth/register` — Create account
+- `POST /auth/login` — Sign in
+- `POST /auth/logout` — Sign out
+- `GET /auth/me` — Get current user
+- `GET /modules` — List all modules
+- `GET /modules/:id` — Module detail
+- `GET /lessons/:id` — Lesson detail
+- `POST /lessons/:id/complete` — Mark lesson complete
+- `GET /quizzes` — List quizzes
+- `GET /quizzes/:id` — Quiz detail
+- `POST /quizzes/:id/attempt` — Submit quiz answers
+- `GET /dashboard/:userId` — User dashboard (XP, progress, next module, resume lesson)
+- `GET /dashboard/stats` — Platform-wide statistics
+- `GET /badges` — All badges
+- `GET /users/:userId/badges` — User's earned badges
+- `GET /forum` — Forum posts
+- `GET /forum/:id` — Forum post + replies
+- `POST /forum` — Create post
+- `POST /forum/:id/replies` — Add reply
+- `GET /case-studies` — Case studies list
+- `GET /case-studies/:id` — Case study detail
+- `GET /puzzles` — All puzzles
+- `POST /puzzles/:id/complete` — Mark puzzle complete
 
 ## Frontend Pages
 
 | Route | Component | Description |
 |-------|-----------|-------------|
-| `/` | Home | Cinematic hero with global stats |
-| `/learn` | Learn | Module listing with icons + levels |
-| `/learn/:id` | ModuleDetail | Lesson list timeline view |
-| `/learn/:moduleId/lesson/:lessonId` | LessonDetail | Markdown lesson content + Mark as Complete |
-| `/quiz` | QuizHub | Quiz card listing |
-| `/quiz/:id` | QuizDetail | Interactive multi-step quiz with scoring |
-| `/dashboard` | Dashboard | XP, levels, progress, recommended module |
-| `/badges` | Badges | Earned + locked badge showcase |
-| `/case-studies` | CaseStudies | Australian disinformation case study cards |
-| `/case-studies/:slug` | CaseStudyDetail | Full case study with markdown content |
-| `/forum` | Forum | Community discussion board |
-| `/forum/:postId` | ForumPostDetail | Individual post with replies |
+| `/` | `Home` | Landing / welcome page |
+| `/learn` | `Learn` | Modules list |
+| `/learn/:moduleId` | `ModuleDetail` | Module overview + lessons |
+| `/learn/:moduleId/lesson/:id` | `LessonDetail` | Lesson content + completion |
+| `/quiz` | `QuizHub` | Quiz browser |
+| `/quiz/:quizId` | `QuizDetail` | Interactive quiz |
+| `/puzzles` | `PuzzlesPage` | Interactive puzzles (Word Match, Fill Blank, Drag Order) |
+| `/dashboard` | `Dashboard` | Command Center — XP, stats, resume learning |
+| `/badges` | `Badges` | Awards / badges collection |
+| `/case-studies` | `CaseStudies` | Case study browser |
+| `/case-studies/:id` | `CaseStudyDetail` | Full case study |
+| `/forum` | `Forum` | Community discussion |
+| `/forum/:id` | `ForumPostDetail` | Forum thread |
 
-## API Endpoints
+## Interactive Puzzle Types
 
-All endpoints prefixed with `/api/`:
+Three puzzle types in `src/components/puzzles/`:
+1. **WordMatchPuzzle** — Match terms to definitions by clicking pairs
+2. **FillBlankPuzzle** — Fill in missing words from a word bank
+3. **DragOrderPuzzle** — Arrange items in correct sequence
 
-- `GET /modules` — list all 5 learning modules
-- `GET /modules/:id` — module with lessons
-- `GET /lessons/:id` — full lesson content (markdown)
-- `POST /lessons/:id/complete` — mark lesson complete, award XP
-- `GET /quizzes` — list all quizzes
-- `GET /quizzes/:id` — quiz with questions (no correct answers)
-- `POST /quizzes/:quizId/submit` — submit answers, get score + badges
-- `GET /badges` — all badges
-- `GET /progress/:userId` — user's completed lessons + earned badges
-- `GET /dashboard/:userId` — full dashboard data (XP, level, activity)
-- `GET /dashboard/stats` — global platform stats
-- `GET /case-studies` — list case studies
-- `GET /case-studies/:slug` — full case study
-- `GET /forum` — forum posts
-- `GET /forum/:postId` — post with replies
-- `POST /forum` — create new post
-- `POST /forum/:postId/reply` — add reply
+## Dashboard Resume Learning
 
-## Database Schema (PostgreSQL via Drizzle ORM)
+The dashboard API (`/dashboard/:userId`) returns a `resumeLesson` field with:
+- `lessonId`, `lessonTitle`, `moduleId`, `moduleTitle`, `moduleIcon`
 
-Tables: `modules`, `lessons`, `quizzes`, `quiz_questions`, `quiz_attempts`, `badges`, `user_badges`, `user_xp`, `user_progress`, `forum_posts`, `forum_replies`, `case_studies`
-
-## Seed Data
-
-Run `pnpm --filter @workspace/scripts run seed` to populate:
-- 5 learning modules (Understanding Misinformation → Coordinated Influence Operations)
-- 9 lessons with rich Australian-context content
-- 3 quizzes with 10 total questions
-- 7 badges (common → legendary)
-- 2 case studies: 2019 Death Tax Campaign, 2023 Voice Referendum Disinformation
-
-## Design
-
-- Dark navy/slate theme (`#0b1120` background, `#38bdf8` electric blue primary)
-- Inter (body) + Playfair Display (headings) via Google Fonts
-- Framer Motion animations throughout
-- Intelligence briefing aesthetic ("Command Center", "Clearance: Guest", "Commence Briefing")
-- Responsive with sidebar (desktop) / top nav (mobile)
+The dashboard shows a "Resume Briefing" banner at the top when the user has prior progress, linking directly to the next uncompleted lesson.
 
 ## Running Locally
 
 ```bash
-# Start API server
-pnpm --filter @workspace/api-server run dev
+# Install dependencies
+pnpm install
 
-# Start frontend
-pnpm --filter @workspace/infoshield run dev
+# Start both servers (normally via Replit workflows)
+pnpm --filter @workspace/api-server run dev   # port 8080
+pnpm --filter @workspace/infoshield run dev    # port from PORT env
+
+# Seed the database
+pnpm --filter @workspace/api-server run seed
+
+# Push DB schema changes
+pnpm --filter @workspace/db run push-force
 ```
+
+## Environment Variables
+
+| Var | Purpose | Default |
+|-----|---------|---------|
+| `DATABASE_URL` | PostgreSQL connection string | (required) |
+| `SESSION_SECRET` | Express session secret | `infoshield-dev-secret-2026` |
+| `PORT` | Dev server port | (set by Replit) |
+| `BASE_PATH` | Vite base path | (set by Replit) |

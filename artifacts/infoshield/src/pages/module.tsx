@@ -5,17 +5,20 @@ import { Link } from "wouter";
 import { Clock, CheckCircle, Circle, ArrowLeft, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DynamicIcon } from "@/lib/icon-map";
+import { useAuth } from "@/context/auth";
 
 export function ModuleDetail() {
   const params = useParams<{ moduleId: string }>();
   const moduleId = parseInt(params.moduleId || "0");
+  const { user } = useAuth();
+  const userId = user?.id ?? "guest-user";
 
   const { data: moduleData, isLoading } = useGetModule(moduleId, {
     query: { enabled: !!moduleId, queryKey: getGetModuleQueryKey(moduleId) }
   });
 
-  const { data: progress } = useGetUserProgress("guest-user", {
-    query: { queryKey: getGetUserProgressQueryKey("guest-user") }
+  const { data: progress } = useGetUserProgress(userId, {
+    query: { queryKey: getGetUserProgressQueryKey(userId) }
   });
 
   const completedLessonIds = new Set(progress?.completedLessons || []);

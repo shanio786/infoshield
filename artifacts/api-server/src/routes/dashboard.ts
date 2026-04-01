@@ -9,7 +9,7 @@ import {
   lessonsTable,
   usersTable,
 } from "@workspace/db/schema";
-import { eq, count } from "drizzle-orm";
+import { eq, count, asc } from "drizzle-orm";
 
 const router: IRouter = Router();
 
@@ -64,6 +64,34 @@ router.get("/dashboard/:userId", async (req, res) => {
       nextModuleWithCount = { ...nextModule, lessonCount: Number(lc?.count ?? 0) };
     }
 
+    // Build "resume lesson" — find the next uncompleted lesson
+    let resumeLesson: { lessonId: number; lessonTitle: string; moduleId: number; moduleTitle: string; moduleIcon: string | null } | null = null;
+    if (progressRows.length > 0) {
+      const completedLessonIds = new Set(progressRows.map((p) => p.lessonId));
+      // Find the first module that has uncompleted lessons, start from the last active module
+      const lastProgress = [...progressRows].sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime())[0];
+      const activeModuleId = lastProgress?.moduleId;
+      const searchModules = activeModuleId
+        ? [allModules.find((m) => m.id === activeModuleId), ...allModules.filter((m) => m.id !== activeModuleId)].filter(Boolean)
+        : allModules;
+
+      for (const mod of searchModules) {
+        if (!mod) continue;
+        const modLessons = await db.select().from(lessonsTable).where(eq(lessonsTable.moduleId, mod.id)).orderBy(asc(lessonsTable.order));
+        const nextLesson = modLessons.find((l) => !completedLessonIds.has(l.id));
+        if (nextLesson) {
+          resumeLesson = {
+            lessonId: nextLesson.id,
+            lessonTitle: nextLesson.title,
+            moduleId: mod.id,
+            moduleTitle: mod.title,
+            moduleIcon: mod.icon ?? null,
+          };
+          break;
+        }
+      }
+    }
+
     const recentActivity = [
       ...progressRows.slice(-3).map((p) => ({
         type: "lesson",
@@ -92,6 +120,7 @@ router.get("/dashboard/:userId", async (req, res) => {
       currentStreak: Math.min(progressRows.length, 7),
       recentActivity,
       nextModule: nextModuleWithCount,
+      resumeLesson,
     });
   } catch (err) {
     req.log.error({ err }, "Error getting dashboard");

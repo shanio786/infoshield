@@ -9,10 +9,13 @@ import dashboardRouter from "./dashboard";
 import forumRouter from "./forum";
 import caseStudiesRouter from "./caseStudies";
 import usersRouter from "./users";
+import authRouter from "./auth";
+import puzzlesRouter from "./puzzles";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
+router.use(authRouter);
 router.use(modulesRouter);
 router.use(lessonsRouter);
 router.use(quizzesRouter);
@@ -22,5 +25,6 @@ router.use(dashboardRouter);
 router.use(forumRouter);
 router.use(caseStudiesRouter);
 router.use(usersRouter);
+router.use(puzzlesRouter);
 
 export default router;

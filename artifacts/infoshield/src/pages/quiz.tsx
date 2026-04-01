@@ -6,11 +6,13 @@ import { Shield, AlertCircle, ArrowRight, CheckCircle2, XCircle, Award } from "l
 import { DynamicIcon } from "@/lib/icon-map";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useAuth } from "@/context/auth";
 
 export function QuizDetail() {
   const params = useParams<{ quizId: string }>();
   const quizId = parseInt(params.quizId || "0");
   const [, setLocation] = useLocation();
+  const { user } = useAuth();
 
   const { data: quiz, isLoading } = useGetQuiz(quizId, {
     query: { enabled: !!quizId, queryKey: getGetQuizQueryKey(quizId) }
@@ -44,7 +46,7 @@ export function QuizDetail() {
 
       submitMutation.mutate({
         quizId,
-        data: { userId: "guest-user", answers: formattedAnswers }
+        data: { userId: user?.id ?? "guest-user", answers: formattedAnswers }
       }, {
         onSuccess: (data) => setResult(data)
       });

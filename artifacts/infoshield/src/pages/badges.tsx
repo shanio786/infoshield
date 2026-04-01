@@ -4,14 +4,17 @@ import { Award, Lock } from "lucide-react";
 import { DynamicIcon } from "@/lib/icon-map";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge as UiBadge } from "@/components/ui/badge";
+import { useAuth } from "@/context/auth";
 
 export function Badges() {
+  const { user } = useAuth();
+  const userId = user?.id ?? "guest-user";
   const { data: allBadges, isLoading: badgesLoading } = useListBadges({
     query: { queryKey: getListBadgesQueryKey() }
   });
 
-  const { data: progress } = useGetUserProgress("guest-user", {
-    query: { queryKey: getGetUserProgressQueryKey("guest-user") }
+  const { data: progress } = useGetUserProgress(userId, {
+    query: { queryKey: getGetUserProgressQueryKey(userId) }
   });
 
   if (badgesLoading) {

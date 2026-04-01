@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/context/auth";
 
 export function Forum() {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const { user } = useAuth();
 
   const { data: posts, isLoading } = useListForumPosts({}, {
     query: { queryKey: getListForumPostsQueryKey() }
@@ -30,8 +32,8 @@ export function Forum() {
       data: {
         title,
         content,
-        authorName: "Guest Analyst",
-        userId: "guest-user"
+        authorName: user?.displayName ?? "Guest Analyst",
+        userId: user?.id ?? "guest-user"
       }
     }, {
       onSuccess: () => {

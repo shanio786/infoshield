@@ -7,12 +7,14 @@ import { ArrowLeft, User, Clock, MessageSquareQuote } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/context/auth";
 
 export function ForumPostDetail() {
   const params = useParams<{ postId: string }>();
   const postId = parseInt(params.postId || "0");
   const queryClient = useQueryClient();
   const [replyContent, setReplyContent] = useState("");
+  const { user } = useAuth();
 
   const { data: post, isLoading } = useGetForumPost(postId, {
     query: { enabled: !!postId, queryKey: getGetForumPostQueryKey(postId) }
@@ -28,8 +30,8 @@ export function ForumPostDetail() {
       postId,
       data: {
         content: replyContent,
-        authorName: "Guest Analyst",
-        userId: "guest-user"
+        authorName: user?.displayName ?? "Guest Analyst",
+        userId: user?.id ?? "guest-user"
       }
     }, {
       onSuccess: () => {

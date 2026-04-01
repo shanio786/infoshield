@@ -11,6 +11,7 @@ import { Link } from "wouter";
 import { ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ReactMarkdown from "react-markdown";
+import { useAuth } from "@/context/auth";
 
 export function LessonDetail() {
   const params = useParams<{ moduleId: string; lessonId: string }>();
@@ -18,6 +19,8 @@ export function LessonDetail() {
   const lessonId = parseInt(params.lessonId || "0");
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
+  const { user } = useAuth();
+  const userId = user?.id ?? "guest-user";
 
   const { data: lesson, isLoading: lessonLoading } = useGetLesson(lessonId, {
     query: { enabled: !!lessonId, queryKey: getGetLessonQueryKey(lessonId) }
@@ -27,8 +30,8 @@ export function LessonDetail() {
     query: { enabled: !!moduleId, queryKey: getGetModuleQueryKey(moduleId) }
   });
 
-  const { data: progress } = useGetUserProgress("guest-user", {
-    query: { queryKey: getGetUserProgressQueryKey("guest-user") }
+  const { data: progress } = useGetUserProgress(userId, {
+    query: { queryKey: getGetUserProgressQueryKey(userId) }
   });
 
   const completeMutation = useCompleteLesson();
@@ -42,11 +45,11 @@ export function LessonDetail() {
 
   const handleMarkComplete = () => {
     completeMutation.mutate({
-      userId: "guest-user",
+      userId,
       data: { lessonId, moduleId }
     }, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: getGetUserProgressQueryKey("guest-user") });
+        queryClient.invalidateQueries({ queryKey: getGetUserProgressQueryKey(userId) });
         if (nextLesson) {
           setLocation(`/learn/${moduleId}/lesson/${nextLesson.id}`);
         } else {

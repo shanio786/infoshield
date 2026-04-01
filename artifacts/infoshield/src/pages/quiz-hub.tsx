@@ -4,14 +4,17 @@ import { Link } from "wouter";
 import { HelpCircle, CheckCircle, XCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/context/auth";
 
 export function QuizHub() {
+  const { user } = useAuth();
+  const userId = user?.id ?? "guest-user";
   const { data: quizzes, isLoading: quizzesLoading } = useListQuizzes({}, {
     query: { queryKey: getListQuizzesQueryKey() }
   });
 
-  const { data: progress } = useGetUserProgress("guest-user", {
-    query: { queryKey: getGetUserProgressQueryKey("guest-user") }
+  const { data: progress } = useGetUserProgress(userId, {
+    query: { queryKey: getGetUserProgressQueryKey(userId) }
   });
 
   // Map progress to quiz status

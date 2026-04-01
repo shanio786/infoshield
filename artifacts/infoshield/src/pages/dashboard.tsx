@@ -1,23 +1,42 @@
 import { useGetDashboard, getGetDashboardQueryKey } from "@workspace/api-client-react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { Target, BookOpen, ShieldAlert, Zap, TrendingUp, ChevronRight, Award } from "lucide-react";
+import { Target, BookOpen, ShieldAlert, Zap, TrendingUp, ChevronRight, Award, PlayCircle } from "lucide-react";
 import { DynamicIcon } from "@/lib/icon-map";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/context/auth";
+
+interface ResumeLesson {
+  lessonId: number;
+  lessonTitle: string;
+  moduleId: number;
+  moduleTitle: string;
+  moduleIcon: string | null;
+}
+
+interface DashboardWithResume {
+  resumeLesson?: ResumeLesson | null;
+  [key: string]: unknown;
+}
 
 export function Dashboard() {
-  const { data: dashboard, isLoading } = useGetDashboard("guest-user", {
-    query: { queryKey: getGetDashboardQueryKey("guest-user") }
+  const { user } = useAuth();
+  const userId = user?.id ?? "guest-user";
+  const { data: dashboardRaw, isLoading } = useGetDashboard(userId, {
+    query: { queryKey: getGetDashboardQueryKey(userId) }
   });
 
   if (isLoading) {
     return <div className="p-10 text-center animate-pulse">Loading Command Center...</div>;
   }
 
-  if (!dashboard) {
+  if (!dashboardRaw) {
     return <div className="p-10 text-center text-destructive">Failed to load data.</div>;
   }
+
+  const dashboard = dashboardRaw as typeof dashboardRaw & DashboardWithResume;
+  const resumeLesson = dashboard.resumeLesson as ResumeLesson | null | undefined;
 
   // Calculate XP progress to next level (matches backend: level = floor(xp/200)+1)
   const XP_PER_LEVEL = 200;
@@ -31,10 +50,34 @@ export function Dashboard() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 md:p-10 w-full space-y-8">
+      {/* Resume Learning Banner */}
+      {resumeLesson && (
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="relative overflow-hidden rounded-xl border border-primary/40 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-5 flex items-center justify-between gap-4">
+            <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none" />
+            <div className="flex items-center gap-4 min-w-0">
+              <div className="w-12 h-12 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center shrink-0">
+                <PlayCircle className="w-6 h-6 text-primary" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-xs font-mono font-bold text-primary tracking-widest uppercase block mb-0.5">Resume Briefing</span>
+                <h3 className="font-serif font-bold text-foreground truncate text-lg">{resumeLesson.lessonTitle}</h3>
+                <p className="text-sm text-muted-foreground truncate">Module: {resumeLesson.moduleTitle}</p>
+              </div>
+            </div>
+            <Link href={`/learn/${resumeLesson.moduleId}/lesson/${resumeLesson.lessonId}`}>
+              <button className="shrink-0 bg-primary text-primary-foreground font-bold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2 text-sm">
+                Continue <ChevronRight className="w-4 h-4" />
+              </button>
+            </Link>
+          </div>
+        </motion.div>
+      )}
+
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-border pb-6">
         <div>
           <h1 className="text-4xl font-serif font-bold tracking-tight">Command Center</h1>
-          <p className="text-muted-foreground mt-2 text-lg">Analyst: <span className="font-mono text-primary uppercase">guest-user</span></p>
+          <p className="text-muted-foreground mt-2 text-lg">Analyst: <span className="font-mono text-primary uppercase">{user?.displayName ?? "Guest"}</span></p>
         </div>
         <div className="flex gap-4">
           <div className="bg-card border border-border rounded-lg p-3 flex flex-col items-center min-w-[100px]">
