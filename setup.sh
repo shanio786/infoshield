@@ -37,7 +37,9 @@ pnpm config set registry https://registry.npmjs.org 2>/dev/null || true
 pnpm install
 
 # Load .env variables
-export $(grep -v '^#' .env | xargs)
+set -a
+source .env
+set +a
 
 # 4. Database tables
 echo "Creating tables..."
