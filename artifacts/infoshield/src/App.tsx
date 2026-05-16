@@ -20,6 +20,8 @@ import { ForumPostDetail } from "@/pages/forum-post";
 import { PuzzlesPage } from "@/pages/puzzles";
 import { ProfilePage } from "@/pages/profile";
 import { Login } from "@/pages/login";
+import { FileFlowLanding } from "@/pages/fileflow-landing";
+import { FileFlowDemo } from "@/pages/fileflow-demo";
 
 import NotFound from "@/pages/not-found";
 
@@ -61,6 +63,16 @@ function Router() {
           <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground">Loading...</span>
         </div>
       </div>
+    );
+  }
+
+  // FileFlow pages render without the InfoShield layout
+  if (location === "/fileflow" || location.startsWith("/fileflow/")) {
+    return (
+      <Switch>
+        <Route path="/fileflow" component={FileFlowLanding} />
+        <Route path="/fileflow/demo" component={FileFlowDemo} />
+      </Switch>
     );
   }
 
